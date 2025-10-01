@@ -20,6 +20,7 @@ QList<QString>Rs485::Portnames()
     }
 
     return names;
+
 }
 
 
