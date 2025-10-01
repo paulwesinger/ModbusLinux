@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "Rs485.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,8 +17,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+protected:
+    void Init();
 
 private:
     Ui::MainWindow *ui;
+
+    Rs485 * rs485;
 };
 #endif // MAINWINDOW_H
