@@ -1,4 +1,4 @@
-QT       += core gui serialport
+QT       += core gui serialport serialbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,11 +11,15 @@ CONFIG += c++17
 SOURCES += \
     Rs485.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    modbus.cpp \
+    serialrtu.cpp
 
 HEADERS += \
     Rs485.h \
-    mainwindow.h
+    mainwindow.h \
+    modbus.h \
+    serialrtu.h
 
 FORMS += \
     mainwindow.ui
