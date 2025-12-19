@@ -11,58 +11,38 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     Init();
+
 }
 
 void MainWindow::Init(){
 
     serialRTU = new SerialRTu(this);
-    if (serialRTU->Init(this))
-    {
+
+    if (serialRTU->Init(this)){
         for (auto i= 0; i< serialRTU->AvailablePorts().length(); i++){
             ui->cmboPorts->addItem(serialRTU->AvailablePorts()[i].portName());
         }
 
+        connect(serialRTU->ModbusServer(),SIGNAL(QModbusDevice::stateChanged(QModbusDevice::State)),this,SLOT(MainWindow::onStateChanged(QModbusDevice::State)));
+
+        if (serialRTU->Connected())
+            ui->lblBaudrate->setText("Connected");
+        else
+                ui->lblBaudrate->setText("Disconnected");
+
+
     }
-
-    // mbRTUServer = new QModbusRtuSerialServer();
-    // mbRTUServer->setConnectionParameter(QModbusDevice::SerialParityParameter,QSerialPort::Parity::NoParity);
-    // mbRTUServer->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,QSerialPort::Data8);
-    // mbRTUServer->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,QSerialPort::StopBits::OneStop);
-    // mbRTUServer->setConnectionParameter(QModbusDevice::SerialBaudRateParameter,QSerialPort::Baud9600);
-
-    // if (mbRTUServer->open()) {
-    //     bool passt = true;
-    // }
-
-
-
-
-    //mbClient = new QModbusClient(this);
-    // rs485 = new Rs485();
-    // auto ports = QSerialPortInfo::availablePorts();
-    // for (int i=0;i<ports.length();i++){
-    //     ui->cmboPorts->addItem(ports[i].portName());
-    //     Protokoll protokoll;
-
-    //     QList<qint32> baudrates = ports[i].standardBaudRates();
-    //     QSerialPort* serialport = rs485->GetSerialPort();
-    //     serialport->setPort(ports[i]);
-    //     serialport->setBaudRate(baudrates[0]);
-    //     serialport->setStopBits(QSerialPort::StopBits::OneStop);
-    //     serialport->setParity(QSerialPort::Parity::NoParity);
-    //     serialport->setDataBits(QSerialPort::Data8);
-
-    //     ui->lblStartbit->setText("1");
-    //     ui->lblBaudrate->setText("9600");
-
-    //    // ui->lblStopbits = QSerialPort::StopBits::OneStop;
-    // }
 }
 
+
+void MainWindow::onStateChanged(QModbusDevice::State state) {
+    bool wurscht = true;
+}
 
 
 MainWindow::~MainWindow()
 {
+    delete serialRTU;
     delete ui;
    // delete rs485;
 }

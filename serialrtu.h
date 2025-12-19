@@ -9,7 +9,10 @@ class SerialRTu :QObject
     Q_OBJECT
 public:
     explicit SerialRTu(QObject * parent= nullptr);
-    bool Init(QObject * parent = nullptr);
+    ~SerialRTu();
+
+    bool Init(QObject * parent = nullptr);   
+    QModbusServer * ModbusServer();
 
     bool Connected();
     QList<QSerialPortInfo> AvailablePorts();
@@ -19,10 +22,12 @@ protected:
     QList<QSerialPortInfo> availableports;
 
 private slots:
-      void onStateChanged(QModbusDevice::State state);
+     // void onStateChanged(QModbusDevice::State state);
+    void onDataWritten(QModbusDataUnit::RegisterType table, int address, int size);
 private :
 
     QModbusServer *modbusDevice = nullptr;
+
 signals:
 };
 

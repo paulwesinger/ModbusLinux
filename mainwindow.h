@@ -33,6 +33,8 @@ protected:
     //QModbusServer * mbServer;
     SerialRTu * serialRTU = nullptr;
 
+private slots:
+    void onStateChanged(QModbusDevice::State state);
 
 private:
     Ui::MainWindow *ui;
