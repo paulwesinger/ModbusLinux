@@ -17,13 +17,11 @@ public:
     bool Connected();
     QList<QSerialPortInfo> AvailablePorts();
 protected:
-
     bool connected = false;
     QList<QSerialPortInfo> availableports;
 
 private slots:
-     // void onStateChanged(QModbusDevice::State state);
-    void onDataWritten(QModbusDataUnit::RegisterType table, int address, int size);
+
 private :
 
     QModbusServer *modbusDevice = nullptr;

@@ -23,7 +23,8 @@ void MainWindow::Init(){
             ui->cmboPorts->addItem(serialRTU->AvailablePorts()[i].portName());
         }
 
-        connect(serialRTU->ModbusServer(),SIGNAL(QModbusDevice::stateChanged(QModbusDevice::State)),this,SLOT(MainWindow::onStateChanged(QModbusDevice::State)));
+        connect(serialRTU->ModbusServer(),&QModbusServer::stateChanged,this,&MainWindow::onStateChanged);
+        connect(serialRTU->ModbusServer(),&QModbusServer::dataWritten,this,&MainWindow::onDataWritten);
 
         if (serialRTU->Connected())
             ui->lblBaudrate->setText("Connected");
@@ -36,6 +37,10 @@ void MainWindow::Init(){
 
 
 void MainWindow::onStateChanged(QModbusDevice::State state) {
+    bool wurscht = true;
+}
+
+void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
     bool wurscht = true;
 }
 

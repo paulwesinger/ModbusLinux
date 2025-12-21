@@ -11,11 +11,8 @@ SerialRTu::~SerialRTu(){
 bool SerialRTu::Init(QObject *parent)
 {
     modbusDevice = new QModbusRtuSerialServer(parent);
-
-
-
-    connect(modbusDevice,SIGNAL(QModbusServer::dataWritten(QModbusDataUnit::RegisterType,int,int)),
-             this, SLOT(SerialRTu::onDataWritten(QModbusDataUnit,int,int)));
+    // connect(modbusDevice,&QModbusDevice::dataWritten,   //(QModbusDataUnit::RegisterType,int,int)),
+    //          this,&SerialRTu::onDataWritten);    //SLOT(onDataWritten(QModbusDataUnit,int,int)));
 
     availableports = QSerialPortInfo::availablePorts();
     if (availableports.length() > 0){
@@ -35,9 +32,7 @@ bool SerialRTu::Init(QObject *parent)
     return true;
 }
 
-void SerialRTu::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
-    bool wurscht = true;
-}
+
 
 QModbusServer* SerialRTu::ModbusServer(){
     return modbusDevice;
