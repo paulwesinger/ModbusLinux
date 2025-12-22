@@ -2,12 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//#include <QSerialPortInfo>
-//#include <QModbusClient>
-//#include <QModbusDevice>
-//#include <QModbusServer>
 #include <QModbusRtuSerialServer>
 #include "serialrtu.h"
+#include "serialrtumodel.h"
 
 #include "Rs485.h"
 //#include "modbusrs485.h"
@@ -32,6 +29,7 @@ protected:
     //QModbusDevice * mbDevice;
     //QModbusServer * mbServer;
     SerialRTu * serialRTU = nullptr;
+    ModbusRTUModel * mbRTUModel = nullptr;
 
 private slots:
     void onStateChanged(QModbusDevice::State state);

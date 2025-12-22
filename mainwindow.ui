@@ -19,41 +19,53 @@
      <rect>
       <x>19</x>
       <y>29</y>
-      <width>261</width>
+      <width>291</width>
       <height>221</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
+     <item row="0" column="0" colspan="2">
       <widget class="QComboBox" name="cmboPorts"/>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="lblStartbit">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>Modbus suchen ...</string>
-       </property>
-      </widget>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit"/>
      </item>
      <item row="3" column="0">
+      <widget class="QLabel" name="lblStopbits">
+       <property name="text">
+        <string>Stopbits</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
       <widget class="QLabel" name="lblBaudrate">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Baudrate</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblStartbit">
+       <property name="text">
+        <string>Startbit</string>
        </property>
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="lblStopbits">
+      <widget class="QLabel" name="lblParity">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Parity</string>
        </property>
       </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="cmbBaudRate"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="cmbStopBits"/>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="cmbParity"/>
      </item>
     </layout>
    </widget>

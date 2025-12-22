@@ -13,13 +13,15 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     modbus.cpp \
-    serialrtu.cpp
+    serialrtu.cpp \
+    serialrtumodel.cpp
 
 HEADERS += \
     Rs485.h \
     mainwindow.h \
     modbus.h \
-    serialrtu.h
+    serialrtu.h \
+    serialrtumodel.h
 
 FORMS += \
     mainwindow.ui

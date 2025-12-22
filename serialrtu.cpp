@@ -3,36 +3,47 @@
 #include <QModbusRtuSerialServer>
 
 SerialRTu::SerialRTu(QObject *parent)
-{  
+{
+
 }
 SerialRTu::~SerialRTu(){
+    modbusDevice->disconnectDevice();
     availableports.clear();
 }
-bool SerialRTu::Init(QObject *parent)
+bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
 {
+    mbRTUModel = model;
+
+    connected = false;
     modbusDevice = new QModbusRtuSerialServer(parent);
-    // connect(modbusDevice,&QModbusDevice::dataWritten,   //(QModbusDataUnit::RegisterType,int,int)),
-    //          this,&SerialRTu::onDataWritten);    //SLOT(onDataWritten(QModbusDataUnit,int,int)));
-
     availableports = QSerialPortInfo::availablePorts();
-    if (availableports.length() > 0){
+    if (modbusDevice->state() == QModbusDevice::UnconnectedState){
+        if (availableports.length() > 0){
 
+            mbRTUModel->setPortName(availableports[0].portName());
 
-        modbusDevice->setConnectionParameter(QModbusDevice::SerialBaudRateParameter,QSerialPort::Baud9600);
-        modbusDevice->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,QSerialPort::Data8);
-        modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter,QSerialPort::Parity::NoParity);
-        modbusDevice->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,QSerialPort::StopBits::OneStop);
-        modbusDevice->setConnectionParameter(QModbusDevice::SerialPortNameParameter,availableports[0].portName());
+    //         if (connected) {
+    //             QVariant va = modbusDevice-> connectionParameter(QModbusDevice::SerialBaudRateParameter);
+    //             QString st = va.toString();
+    //        //     _Databits =  modbusDevice->connectionParameter(QModbusDevice::SerialDataBitsParameter);
 
-        if (modbusDevice->state() == QModbusDevice::UnconnectedState){
+            modbusDevice->setConnectionParameter(QModbusDevice::SerialBaudRateParameter,QSerialPort::Baud9600);
+            modbusDevice->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,QSerialPort::Data8);
+            modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter,QSerialPort::Parity::NoParity);
+            modbusDevice->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,QSerialPort::StopBits::OneStop);
+            modbusDevice->setConnectionParameter(QModbusDevice::SerialPortNameParameter,availableports[0].portName());
             connected = modbusDevice->connectDevice();
         }
     }
-
-    return true;
+    return connected;
 }
 
-
+int SerialRTu::Baudrate(){
+    return _Baudrate;
+}
+int SerialRTu::Databits(){
+    return _Databits;
+}
 
 QModbusServer* SerialRTu::ModbusServer(){
     return modbusDevice;
@@ -45,11 +56,8 @@ QList<QSerialPortInfo> SerialRTu::AvailablePorts(){
 bool SerialRTu::Connected(){
     return connected;
 }
-// void SerialRTu:: onStateChanged(QModbusDevice::State state){
 
-//     if (state == QModbusDevice::ConnectedState)
-//         connected = true;
-//     else
-//         connected = false;
-// }
+
+
+
 

@@ -16,9 +16,12 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::Init(){
 
+    mbRTUModel = new ModbusRTUModel();
+
+
     serialRTU = new SerialRTu(this);
 
-    if (serialRTU->Init(this)){
+    if (serialRTU->Init(mbRTUModel,this)){
         for (auto i= 0; i< serialRTU->AvailablePorts().length(); i++){
             ui->cmboPorts->addItem(serialRTU->AvailablePorts()[i].portName());
         }
@@ -26,15 +29,16 @@ void MainWindow::Init(){
         connect(serialRTU->ModbusServer(),&QModbusServer::stateChanged,this,&MainWindow::onStateChanged);
         connect(serialRTU->ModbusServer(),&QModbusServer::dataWritten,this,&MainWindow::onDataWritten);
 
-        if (serialRTU->Connected())
-            ui->lblBaudrate->setText("Connected");
+        if (serialRTU->Connected()) {
+            QString br = QString::number(19200);
+            ui->lblBaudrate->setText(br);
+        }
         else
                 ui->lblBaudrate->setText("Disconnected");
 
 
     }
 }
-
 
 void MainWindow::onStateChanged(QModbusDevice::State state) {
     bool wurscht = true;

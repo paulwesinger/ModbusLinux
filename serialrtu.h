@@ -3,6 +3,7 @@
 
 #include <QModbusServer>
 #include <QSerialPortInfo>
+#include <serialrtumodel.h>
 
 class SerialRTu :QObject
 {
@@ -11,20 +12,28 @@ public:
     explicit SerialRTu(QObject * parent= nullptr);
     ~SerialRTu();
 
-    bool Init(QObject * parent = nullptr);   
+    bool Init(ModbusRTUModel *model,QObject * parent = nullptr);
     QModbusServer * ModbusServer();
+    bool Connected();    
 
-    bool Connected();
     QList<QSerialPortInfo> AvailablePorts();
+    int Baudrate();
+    int Databits();
+
 protected:
     bool connected = false;
     QList<QSerialPortInfo> availableports;
+
+    ModbusRTUModel * mbRTUModel = nullptr;
 
 private slots:
 
 private :
 
     QModbusServer *modbusDevice = nullptr;
+
+    int _Baudrate;
+    int _Databits;
 
 signals:
 };
