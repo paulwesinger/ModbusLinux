@@ -20,22 +20,21 @@
       <x>19</x>
       <y>29</y>
       <width>291</width>
-      <height>221</height>
+      <height>251</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" colspan="2">
-      <widget class="QComboBox" name="cmboPorts"/>
-     </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="leSartbit"/>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="lblStopbits">
-       <property name="text">
-        <string>Stopbits</string>
-       </property>
-      </widget>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="cmbStopBits"/>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="cmbParity"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="cmbBaudRate"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="lblBaudrate">
@@ -51,6 +50,13 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="lblStopbits">
+       <property name="text">
+        <string>Stopbits</string>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="0">
       <widget class="QLabel" name="lblParity">
        <property name="text">
@@ -58,14 +64,18 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="cmbBaudRate"/>
+     <item row="0" column="0" colspan="2">
+      <widget class="QComboBox" name="cmboPorts"/>
      </item>
-     <item row="3" column="1">
-      <widget class="QComboBox" name="cmbStopBits"/>
+     <item row="5" column="0">
+      <widget class="QLabel" name="lblDataBits">
+       <property name="text">
+        <string>DataBits</string>
+       </property>
+      </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QComboBox" name="cmbParity"/>
+     <item row="5" column="1">
+      <widget class="QComboBox" name="cmbDataBits"/>
      </item>
     </layout>
    </widget>

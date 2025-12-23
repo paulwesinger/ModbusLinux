@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QSerialPortInfo>
+#include <QSerialPort>
 
 
 
@@ -17,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::Init(){
 
     mbRTUModel = new ModbusRTUModel();
-
-
     serialRTU = new SerialRTu(this);
 
     if (serialRTU->Init(mbRTUModel,this)){
@@ -29,19 +28,46 @@ void MainWindow::Init(){
         connect(serialRTU->ModbusServer(),&QModbusServer::stateChanged,this,&MainWindow::onStateChanged);
         connect(serialRTU->ModbusServer(),&QModbusServer::dataWritten,this,&MainWindow::onDataWritten);
 
-        if (serialRTU->Connected()) {
-            QString br = QString::number(19200);
-            ui->lblBaudrate->setText(br);
+        QString msg;
+        if (serialRTU->Connected()) {            
+            msg = tr("Verbunden mit: ");
+            msg.append(mbRTUModel->CurrentPortName());
         }
-        else
-                ui->lblBaudrate->setText("Disconnected");
+        else{
+            msg = tr("Disconnected: ");
+            msg.append(mbRTUModel->CurrentPortName());
+        }
+        this->statusBar()->showMessage(msg);
+        ui->leSartbit->setText("1");
+
+        for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
+            ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
+        }
+
+        for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){
+            ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
+        }
+
+        for (auto i = 0; i<mbRTUModel->Paritys().length(); i++){
+            ui->cmbParity->addItem(mbRTUModel->Paritys()[i].text, mbRTUModel->Paritys()[i].value);
+        }
+        for (auto i = 0; i<mbRTUModel->DataBits().length(); i++){
+            ui->cmbDataBits->addItem(mbRTUModel->DataBits()[i].text, mbRTUModel->DataBits()[i].value);
+        }
 
 
     }
 }
 
 void MainWindow::onStateChanged(QModbusDevice::State state) {
-    bool wurscht = true;
+
+    switch (state){
+    case QModbusDevice::ConnectedState:  break;
+    case QModbusDevice::ClosingState: break;
+    default:
+
+        break;
+    }
 }
 
 void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
