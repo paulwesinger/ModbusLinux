@@ -34,6 +34,7 @@ protected:
 private slots:
     void onStateChanged(QModbusDevice::State state);
     void onDataWritten(QModbusDataUnit::RegisterType table, int address, int size);
+    void onComboDataBitsIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
