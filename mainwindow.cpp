@@ -12,49 +12,76 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     Init();
+    Initconnections();
 
 }
 
-void MainWindow::Init(){
+void MainWindow::Initconnections(){
+    connect(serialRTU->ModbusServer(),&QModbusServer::stateChanged,this,&MainWindow::onStateChanged);
+    connect(serialRTU->ModbusServer(),&QModbusServer::dataWritten,this,&MainWindow::onDataWritten);
+    connect(ui->cmbDataBits,&QComboBox::currentIndexChanged,this,&MainWindow::onComboDataBitsIndexChanged);
+    connect(ui->pbOk,&QPushButton::clicked,this,&MainWindow::onTakeSettings);
+}
 
+void MainWindow::Init(){
+    QString msg;
     mbRTUModel = new ModbusRTUModel();
     serialRTU = new SerialRTu(this);
 
     if (serialRTU->Init(mbRTUModel,this)){
-        for (auto i= 0; i< serialRTU->AvailablePorts().length(); i++){
-            ui->cmboPorts->addItem(serialRTU->AvailablePorts()[i].portName());
+
+
+        for (auto i= 0; i< serialRTU->Ports().length(); i++){
+            ui->cmboPorts->addItem(serialRTU->Ports()[i]->portName());
         }
 
-        connect(serialRTU->ModbusServer(),&QModbusServer::stateChanged,this,&MainWindow::onStateChanged);
-        connect(serialRTU->ModbusServer(),&QModbusServer::dataWritten,this,&MainWindow::onDataWritten);
-        connect(ui->cmbDataBits,&QComboBox::currentIndexChanged,this,&MainWindow::onComboDataBitsIndexChanged);
 
-        QString msg;
         if (serialRTU->Connected()) {            
             msg = tr("Verbunden mit: ");
-            msg.append(mbRTUModel->CurrentPortName());
+            msg.append(serialRTU->Ports()[0]->portName());
         }
         else{
             msg = tr("Disconnected: ");
-            msg.append(mbRTUModel->CurrentPortName());
+            msg.append(serialRTU->Ports()[0]->portName());
         }
         this->statusBar()->showMessage(msg);
+
+        // ********************************************
+        // Erstmal alle verfügbaren einstellungen laden
+        // ********************************************
         ui->leSartbit->setText("1");
 
-        for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
-            ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
+        int baudindex = 0;
+
+
+        for (auto j= 0; j<serialRTU->Ports().length();j++) {
+            for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
+                ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
+                if (mbRTUModel->BaudRates()[i].value == serialRTU->Ports()[j]->baudRate())
+                    baudindex = i;
+            }
+
+            ui->cmbBaudRate->setCurrentIndex(baudindex);
+
+            // for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){
+            //     ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
+            // }
+
+            // for (auto i = 0; i<mbRTUModel->Paritys().length(); i++){
+            //     ui->cmbParity->addItem(mbRTUModel->Paritys()[i].text, mbRTUModel->Paritys()[i].value);
+            // }
+            // for (auto i = 0; i<mbRTUModel->DataBits().length(); i++){
+            //     ui->cmbDataBits->addItem(mbRTUModel->DataBits()[i].text, mbRTUModel->DataBits()[i].value);
+            // }
+
+            // *********************************************
+            // Checken was auf dem Seriellen Port
+            // eingestellt ist, und in den Combos anzeigen
+            // *********************************************
+
         }
 
-        for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){
-            ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
-        }
 
-        for (auto i = 0; i<mbRTUModel->Paritys().length(); i++){
-            ui->cmbParity->addItem(mbRTUModel->Paritys()[i].text, mbRTUModel->Paritys()[i].value);
-        }
-        for (auto i = 0; i<mbRTUModel->DataBits().length(); i++){
-            ui->cmbDataBits->addItem(mbRTUModel->DataBits()[i].text, mbRTUModel->DataBits()[i].value);
-        }
 
 
 
@@ -80,6 +107,9 @@ void MainWindow::onStateChanged(QModbusDevice::State state) {
 }
 void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
     bool wurscht = true;
+}
+void MainWindow::onTakeSettings(){
+
 }
 
 

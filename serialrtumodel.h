@@ -28,6 +28,27 @@ public:
     QSerialPort::Parity CurrentParity();
     QString CurrentPortName();
 
+    /// ****************************************
+    /// Die PortInfos anhand des Comboboxindexes
+    /// ermitteln mit Bereichscheck
+    /// ****************************************
+    QSerialPortInfo *(GetPort(int index));
+
+    /// *****************************************
+    /// Hilfsfunktion, Current gewählten Port
+    /// ohne Argument zurück geben ohne
+    /// Bereichscheck
+    /// *****************************************
+    QSerialPortInfo* CurrentPort();
+
+    /// *****************************************
+    /// Den aktuellen Port anhand des Comboindex
+    /// setzen -> checken ob gültig!
+    /// false -> index out of range,
+    /// true -> index ok
+    /// *****************************************
+    bool SetCurrentPort(int index);
+
     QList<stCombostruct> BaudRates();
     QList<stCombostruct> DataBits();
     QList<stCombostruct> Paritys();
@@ -46,6 +67,7 @@ private:
     QSerialPort::Parity   _CurrentParity;
     QString _CurrentPortName;
     QModbusDevice::State _CurrentState;
+    QSerialPortInfo _CurrentPort;
 
     QList<stCombostruct> _BaudRates;
     QList<stCombostruct> _DataBits;

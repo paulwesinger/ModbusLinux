@@ -14,15 +14,17 @@ public:
 
     bool Init(ModbusRTUModel *model,QObject * parent = nullptr);
     QModbusServer * ModbusServer();
-    bool Connected();    
+    bool Connected();
 
     QList<QSerialPortInfo> AvailablePorts();
+    QList<QSerialPort*> Ports();
     int Baudrate();
     int Databits();
 
 protected:
     bool connected = false;
-    QList<QSerialPortInfo> availableports;
+    QList<QSerialPortInfo> availableportsinfo;
+    QList<QSerialPort*> _Ports;
 
     ModbusRTUModel * mbRTUModel = nullptr;
 

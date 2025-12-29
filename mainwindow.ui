@@ -24,17 +24,15 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="leSartbit"/>
-     </item>
-     <item row="3" column="1">
-      <widget class="QComboBox" name="cmbStopBits"/>
+     <item row="3" column="0">
+      <widget class="QLabel" name="lblStopbits">
+       <property name="text">
+        <string>Stopbits</string>
+       </property>
+      </widget>
      </item>
      <item row="4" column="1">
       <widget class="QComboBox" name="cmbParity"/>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="cmbBaudRate"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="lblBaudrate">
@@ -50,22 +48,14 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="lblStopbits">
-       <property name="text">
-        <string>Stopbits</string>
-       </property>
-      </widget>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="leSartbit"/>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="lblParity">
-       <property name="text">
-        <string>Parity</string>
-       </property>
-      </widget>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="cmbStopBits"/>
      </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QComboBox" name="cmboPorts"/>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="cmbBaudRate"/>
      </item>
      <item row="5" column="0">
       <widget class="QLabel" name="lblDataBits">
@@ -74,8 +64,32 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QComboBox" name="cmboPorts"/>
+     </item>
      <item row="5" column="1">
       <widget class="QComboBox" name="cmbDataBits"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="lblParity">
+       <property name="text">
+        <string>Parity</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QPushButton" name="pbOk">
+       <property name="text">
+        <string>Übernehmen</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QPushButton" name="pbCancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -83,9 +97,9 @@
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>30</y>
+      <y>40</y>
       <width>551</width>
-      <height>221</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="frameShape">

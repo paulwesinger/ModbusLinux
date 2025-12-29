@@ -40,6 +40,26 @@ void ModbusRTUModel::InitStopBits(){
     _StopBits.append(stCombostruct("Zwei Stop Bit",2));
 }
 
+///**************************************
+/// Portinfo Methoden
+/// *************************************
+QSerialPortInfo * ModbusRTUModel::GetPort(int index){
+    // Area check
+    if (index > _AvailablePorts.length() - 1)
+        return nullptr;
+    return &_AvailablePorts[index];
+}
+
+QSerialPortInfo *ModbusRTUModel::CurrentPort(){
+    return &_CurrentPort;
+}
+
+bool ModbusRTUModel::SetCurrentPort(int index){
+    if (index > _AvailablePorts.length()-1)
+        return false;
+    _CurrentPort = _AvailablePorts[index];
+}
+
 
 
 QList<QSerialPortInfo> ModbusRTUModel::AvailablePorts(){
