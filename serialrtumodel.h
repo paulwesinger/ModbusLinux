@@ -20,9 +20,9 @@ class ModbusRTUModel
 {
 public:
     ModbusRTUModel();
+    ~ModbusRTUModel();
 
     QModbusDevice::State CurrentState();
-    QList<QSerialPortInfo> AvailablePorts();
     QSerialPort::BaudRate CurrentBaudRate();
     QSerialPort::DataBits CurrentDataBits();
     QSerialPort::Parity CurrentParity();
@@ -54,14 +54,20 @@ public:
     QList<stCombostruct> Paritys();
     QList<stCombostruct> StopBits();
 
+
+    QList<QSerialPortInfo> AvailablePorts();
+    QList<QSerialPort*> Ports();
+
     void setPortName(QString protname);
     void setBaudRate(QSerialPort::BaudRate baudrate);
     void setDataBits(QSerialPort::DataBits databits);
     void setParity(QSerialPort::Parity);
     void setCurrentState(QModbusDevice::State state);
+    void addPort(QSerialPort* port);
 
 private:
     QList<QSerialPortInfo> _AvailablePorts;
+
     QSerialPort::BaudRate _CurrentBaudRate;
     QSerialPort::DataBits _CurrentDataBits;
     QSerialPort::Parity   _CurrentParity;
@@ -74,11 +80,13 @@ private:
     QList<stCombostruct> _Paritys;
     QList<stCombostruct> _StopBits;
 
+    QList<QSerialPort*> _Ports;
+
     void InitBaudRates();
     void InitDataBits();
     void InitParitys();
     void InitStopBits();
-
+    void GetAvailablePorts();
 
 };
 

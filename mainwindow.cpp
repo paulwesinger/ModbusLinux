@@ -31,18 +31,18 @@ void MainWindow::Init(){
     if (serialRTU->Init(mbRTUModel,this)){
 
 
-        for (auto i= 0; i< serialRTU->Ports().length(); i++){
-            ui->cmboPorts->addItem(serialRTU->Ports()[i]->portName());
+        for (auto i= 0; i< mbRTUModel->Ports().length(); i++){
+            ui->cmboPorts->addItem(mbRTUModel->Ports()[i]->portName());
         }
 
 
         if (serialRTU->Connected()) {            
             msg = tr("Verbunden mit: ");
-            msg.append(serialRTU->Ports()[0]->portName());
+            msg.append(mbRTUModel->Ports()[0]->portName());
         }
         else{
             msg = tr("Disconnected: ");
-            msg.append(serialRTU->Ports()[0]->portName());
+            msg.append(mbRTUModel->Ports()[0]->portName());
         }
         this->statusBar()->showMessage(msg);
 
@@ -54,16 +54,16 @@ void MainWindow::Init(){
         int baudindex = 0;
 
 
-        for (auto j= 0; j<serialRTU->Ports().length();j++) {
+        for (auto j= 0; j<mbRTUModel->Ports().length();j++) {
             for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
                 ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
-                if (mbRTUModel->BaudRates()[i].value == serialRTU->Ports()[j]->baudRate())
+                if (mbRTUModel->BaudRates()[i].value == mbRTUModel->Ports()[j]->baudRate())
                     baudindex = i;
             }
 
             ui->cmbBaudRate->setCurrentIndex(baudindex);
 
-            // for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){
+            // for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){/8
             //     ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
             // }
 

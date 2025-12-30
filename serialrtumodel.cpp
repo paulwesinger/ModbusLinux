@@ -2,10 +2,27 @@
 
 
 ModbusRTUModel::ModbusRTUModel() {
+    GetAvailablePorts();
     InitBaudRates();
     InitDataBits();
     InitParitys();
     InitStopBits();
+}
+
+ModbusRTUModel::~ModbusRTUModel(){
+    _BaudRates.clear();
+    _DataBits.clear();
+    _StopBits.clear();
+    _Paritys.clear();
+    _AvailablePorts.clear();
+}
+
+void ModbusRTUModel::GetAvailablePorts(){
+    _AvailablePorts = QSerialPortInfo::availablePorts();
+}
+
+void ModbusRTUModel::addPort(QSerialPort* port){
+    _Ports.append(port);
 }
 
 void ModbusRTUModel::InitBaudRates(){
@@ -61,6 +78,9 @@ bool ModbusRTUModel::SetCurrentPort(int index){
 }
 
 
+QList<QSerialPort*>ModbusRTUModel::Ports(){
+    return _Ports;
+}
 
 QList<QSerialPortInfo> ModbusRTUModel::AvailablePorts(){
     return _AvailablePorts;

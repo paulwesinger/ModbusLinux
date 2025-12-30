@@ -8,7 +8,7 @@ SerialRTu::SerialRTu(QObject *parent)
 }
 SerialRTu::~SerialRTu(){
     modbusDevice->disconnectDevice();
-    availableportsinfo.clear();
+    delete mbRTUModel;
 }
 bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
 {
@@ -16,14 +16,12 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
 
     connected = false;
     modbusDevice = new QModbusRtuSerialServer(parent);
-    availableportsinfo = QSerialPortInfo::availablePorts();
-
 
     if (modbusDevice->state() == QModbusDevice::UnconnectedState){
-        if (availableportsinfo.length() > 0){
+        if (mbRTUModel->AvailablePorts().length() > 0){
 
-            for (auto i = 0; i <  availableportsinfo.length(); i++){
-                QSerialPort * port = new QSerialPort(availableportsinfo[0]);
+            for (auto i = 0; i < mbRTUModel->AvailablePorts().length(); i++){
+                QSerialPort * port = new QSerialPort(mbRTUModel->AvailablePorts()[0]);
 
                 qint32 databits = port->dataBits();
                 QSerialPort::Parity parity = port->parity();
@@ -31,7 +29,10 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
                 qint32 stopbits = port->stopBits();
                 QString portname = port->portName();
 
-                _Ports.append(port);
+                mbRTUModel->addPort(port);
+
+
+                //mbRTUModel->Ports().append(port);
 
 
                // mbRTUModel->SetCurrentPort(0);
@@ -42,6 +43,9 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
         //             QString st = va.toString();
         //        //     _Databits =  modbusDevice->connectionParameter(QModbusDevice::SerialDataBitsParameter);
 
+                /// ******************************************************************
+                /// Nur für den ersten port standardmässig übernhemen
+                /// ******************************************************************
                 modbusDevice->setConnectionParameter(QModbusDevice::SerialBaudRateParameter,baudrate);
                 modbusDevice->setConnectionParameter(QModbusDevice::SerialDataBitsParameter,databits);
                 modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter,parity);
@@ -54,9 +58,9 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
     return connected;
 }
 
-QList<QSerialPort*>SerialRTu::Ports(){
-    return _Ports;
-}
+// QList<QSerialPort*>SerialRTu::Ports(){
+//     return _Ports;
+// }
 int SerialRTu::Baudrate(){
     return _Baudrate;
 }
@@ -68,9 +72,9 @@ QModbusServer* SerialRTu::ModbusServer(){
     return modbusDevice;
 }
 
-QList<QSerialPortInfo> SerialRTu::AvailablePorts(){
-    return availableportsinfo;
-}
+// QList<QSerialPortInfo> SerialRTu::AvailablePorts(){
+//     return availableportsinfo;
+// }
 
 bool SerialRTu::Connected(){
     return connected;

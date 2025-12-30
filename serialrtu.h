@@ -16,15 +16,15 @@ public:
     QModbusServer * ModbusServer();
     bool Connected();
 
-    QList<QSerialPortInfo> AvailablePorts();
-    QList<QSerialPort*> Ports();
+    // QList<QSerialPortInfo> AvailablePorts();
+    // QList<QSerialPort*> Ports();
     int Baudrate();
     int Databits();
 
 protected:
     bool connected = false;
-    QList<QSerialPortInfo> availableportsinfo;
-    QList<QSerialPort*> _Ports;
+    // QList<QSerialPortInfo> availableportsinfo;
+    // QList<QSerialPort*> _Ports;
 
     ModbusRTUModel * mbRTUModel = nullptr;
 
