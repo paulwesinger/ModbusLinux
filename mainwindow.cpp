@@ -29,8 +29,6 @@ void MainWindow::Init(){
     serialRTU = new SerialRTu(this);
 
     if (serialRTU->Init(mbRTUModel,this)){
-
-
         for (auto i= 0; i< mbRTUModel->Ports().length(); i++){
             ui->cmboPorts->addItem(mbRTUModel->Ports()[i]->portName());
         }
@@ -46,47 +44,38 @@ void MainWindow::Init(){
         }
         this->statusBar()->showMessage(msg);
 
-        // ********************************************
-        // Erstmal alle verfügbaren einstellungen laden
-        // ********************************************
+        /// ********************************************
+        /// Erstmal alle verfügbaren einstellungen laden
+        /// anhand der werte die indexes für die
+        /// comboboxen holen und anzeigen
+        /// ********************************************
         ui->leSartbit->setText("1");
 
-        int baudindex = 0;
-
-
-        for (auto j= 0; j<mbRTUModel->Ports().length();j++) {
-            for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
-                ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
-                if (mbRTUModel->BaudRates()[i].value == mbRTUModel->Ports()[j]->baudRate())
-                    baudindex = i;
-            }
-
-            ui->cmbBaudRate->setCurrentIndex(baudindex);
-
-            // for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){/8
-            //     ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
-            // }
-
-            // for (auto i = 0; i<mbRTUModel->Paritys().length(); i++){
-            //     ui->cmbParity->addItem(mbRTUModel->Paritys()[i].text, mbRTUModel->Paritys()[i].value);
-            // }
-            // for (auto i = 0; i<mbRTUModel->DataBits().length(); i++){
-            //     ui->cmbDataBits->addItem(mbRTUModel->DataBits()[i].text, mbRTUModel->DataBits()[i].value);
-            // }
-
-            // *********************************************
-            // Checken was auf dem Seriellen Port
-            // eingestellt ist, und in den Combos anzeigen
-            // *********************************************
-
+        for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
+            ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
+            if (mbRTUModel->BaudRates()[i].value == mbRTUModel->Ports()[0]->baudRate())
+                ui->cmbBaudRate->setCurrentIndex(i);
         }
 
+         for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){
+             ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
+             if (mbRTUModel->StopBits()[i].value == mbRTUModel->Ports()[0]->stopBits())
+                 ui->cmbStopBits->setCurrentIndex(i);
+         }
 
+         for (auto i = 0; i<mbRTUModel->Paritys().length(); i++){
+             ui->cmbParity->addItem(mbRTUModel->Paritys()[i].text, mbRTUModel->Paritys()[i].value);
+             if (mbRTUModel->Paritys()[i].value == mbRTUModel->Ports()[0]->parity())
+                 ui->cmbParity->setCurrentIndex(i);
+         }
 
-
-
-
+         for (auto i = 0; i<mbRTUModel->DataBits().length(); i++){
+             ui->cmbDataBits->addItem(mbRTUModel->DataBits()[i].text, mbRTUModel->DataBits()[i].value);
+             if (mbRTUModel->DataBits()[i].value == mbRTUModel->Ports()[0]->dataBits())
+                 ui->cmbDataBits->setCurrentIndex(i);
+         }
     }
+
 }
 
 
