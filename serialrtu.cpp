@@ -31,13 +31,9 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
 
                 mbRTUModel->addPort(port);
 
-        //         if (connected) {
-        //             QVariant va = modbusDevice-> connectionParameter(QModbusDevice::SerialBaudRateParameter);
-        //             QString st = va.toString();
-        //        //     _Databits =  modbusDevice->connectionParameter(QModbusDevice::SerialDataBitsParameter);
-
                 /// ******************************************************************
-                /// Nur für den ersten port standardmässig übernhemen
+                /// Nur für den ersten(aktuellen) port Einstellungen übernhemen
+                /// und anzeigen
                 /// ******************************************************************
                 if (i == 0) {
 
@@ -50,29 +46,13 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
                     connected = modbusDevice->connectDevice();
                 }
             }
-
         }
     }
     return connected;
 }
-
-// QList<QSerialPort*>SerialRTu::Ports(){
-//     return _Ports;
-// }
-int SerialRTu::Baudrate(){
-    return _Baudrate;
-}
-int SerialRTu::Databits(){
-    return _Databits;
-}
-
 QModbusServer* SerialRTu::ModbusServer(){
     return modbusDevice;
 }
-
-// QList<QSerialPortInfo> SerialRTu::AvailablePorts(){
-//     return availableportsinfo;
-// }
 
 bool SerialRTu::Connected(){
     return connected;

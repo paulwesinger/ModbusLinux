@@ -67,16 +67,6 @@ QSerialPortInfo * ModbusRTUModel::GetPort(int index){
     return &_AvailablePorts[index];
 }
 
-QSerialPortInfo *ModbusRTUModel::CurrentPort(){
-    return &_CurrentPort;
-}
-
-bool ModbusRTUModel::SetCurrentPort(int index){
-    if (index > _AvailablePorts.length()-1)
-        return false;
-    _CurrentPort = _AvailablePorts[index];
-}
-
 
 QList<QSerialPort*>ModbusRTUModel::Ports(){
     return _Ports;
@@ -84,22 +74,6 @@ QList<QSerialPort*>ModbusRTUModel::Ports(){
 
 QList<QSerialPortInfo> ModbusRTUModel::AvailablePorts(){
     return _AvailablePorts;
-}
-
-QSerialPort::BaudRate ModbusRTUModel::CurrentBaudRate(){
-    return _CurrentBaudRate;
-}
-QSerialPort::DataBits ModbusRTUModel::CurrentDataBits(){
-    return _CurrentDataBits;
-}
-QString ModbusRTUModel::CurrentPortName() {
-    return _CurrentPortName;
-}
-QSerialPort::Parity ModbusRTUModel::CurrentParity(){
-    return  _CurrentParity;
-}
-QModbusDevice::State ModbusRTUModel::CurrentState(){
-    return _CurrentState;
 }
 
 QList<stCombostruct> ModbusRTUModel::BaudRates(){
@@ -113,21 +87,4 @@ QList<stCombostruct> ModbusRTUModel::Paritys(){
 }
 QList<stCombostruct> ModbusRTUModel::DataBits(){
     return _DataBits;
-}
-
-
-void ModbusRTUModel::setCurrentState(QModbusDevice::State state){
-    _CurrentState = state;
-}
-void ModbusRTUModel::setPortName(QString portname){
-    _CurrentPortName = portname;
-}
-void ModbusRTUModel::setDataBits(QSerialPort::DataBits databits){
-    _CurrentDataBits = databits;
-}
-void ModbusRTUModel::setBaudRate(QSerialPort::BaudRate baudrate){
-    _CurrentBaudRate = baudrate;
-}
-void ModbusRTUModel::setParity(QSerialPort::Parity parity){
-    _CurrentParity = parity;
 }

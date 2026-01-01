@@ -21,13 +21,6 @@ class ModbusRTUModel
 public:
     ModbusRTUModel();
     ~ModbusRTUModel();
-
-    QModbusDevice::State CurrentState();
-    QSerialPort::BaudRate CurrentBaudRate();
-    QSerialPort::DataBits CurrentDataBits();
-    QSerialPort::Parity CurrentParity();
-    QString CurrentPortName();
-
     /// ****************************************
     /// Die PortInfos anhand des Comboboxindexes
     /// ermitteln mit Bereichscheck
@@ -58,23 +51,10 @@ public:
     QList<QSerialPortInfo> AvailablePorts();
     QList<QSerialPort*> Ports();
 
-    void setPortName(QString protname);
-    void setBaudRate(QSerialPort::BaudRate baudrate);
-    void setDataBits(QSerialPort::DataBits databits);
-    void setParity(QSerialPort::Parity);
-    void setCurrentState(QModbusDevice::State state);
     void addPort(QSerialPort* port);
 
 private:
     QList<QSerialPortInfo> _AvailablePorts;
-
-    QSerialPort::BaudRate _CurrentBaudRate;
-    QSerialPort::DataBits _CurrentDataBits;
-    QSerialPort::Parity   _CurrentParity;
-    QString _CurrentPortName;
-    QModbusDevice::State _CurrentState;
-    QSerialPortInfo _CurrentPort;
-
     QList<stCombostruct> _BaudRates;
     QList<stCombostruct> _DataBits;
     QList<stCombostruct> _Paritys;
