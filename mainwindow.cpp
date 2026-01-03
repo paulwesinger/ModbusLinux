@@ -101,12 +101,16 @@ void MainWindow::onTakeSettings(){
 
     /// ******************************************
     /// test Checksum 01 01 00 00 00 08    3D CC
+    /// Data von Waveshare relais
     /// ******************************************
     std::vector<ubyte> protokoll {0x01,0x01,0x00,0x00,0x00,0x08};
 
     /// funktioniert
     /// !!!
     std::vector<ubyte> crc = CheckSum::CRCModbus(protokoll);
+
+    // vec1.insert(vec1.end(), vec2.begin(), vec2.end());
+    protokoll.insert(protokoll.end(),crc.begin(),crc.end());
 
 }
 
