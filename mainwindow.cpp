@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QSerialPortInfo>
 #include <QSerialPort>
-
+#include "checksum.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -20,7 +20,7 @@ void MainWindow::Initconnections(){
     connect(serialRTU->ModbusServer(),&QModbusServer::stateChanged,this,&MainWindow::onStateChanged);
     connect(serialRTU->ModbusServer(),&QModbusServer::dataWritten,this,&MainWindow::onDataWritten);
     connect(ui->cmbDataBits,&QComboBox::currentIndexChanged,this,&MainWindow::onComboDataBitsIndexChanged);
-    connect(ui->pbOk,&QPushButton::clicked,this,&MainWindow::onTakeSettings);
+    connect(ui->pbTakeSettings,&QPushButton::clicked,this,&MainWindow::onTakeSettings);
 }
 
 void MainWindow::Init(){
@@ -99,7 +99,18 @@ void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address,
 }
 void MainWindow::onTakeSettings(){
 
+    /// ******************************************
+    /// test Checksum 01 01 00 00 00 08    3D CC
+    /// ******************************************
+    std::vector<ubyte> protokoll {0x01,0x01,0x00,0x00,0x00,0x08};
+
+    /// funktioniert
+    /// !!!
+    std::vector<ubyte> crc = CheckSum::CRCModbus(protokoll);
+
 }
+
+
 
 
 MainWindow::~MainWindow()

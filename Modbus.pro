@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     Rs485.cpp \
+    checksum.cpp \
     main.cpp \
     mainwindow.cpp \
     modbus.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     Rs485.h \
+    checksum.h \
     mainwindow.h \
     modbus.h \
     serialrtu.h \
