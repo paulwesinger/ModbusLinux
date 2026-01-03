@@ -2,6 +2,7 @@
 #include <QSerialPort>
 #include <QModbusRtuSerialServer>
 
+
 SerialRTu::SerialRTu(QObject *parent)
 {
 
@@ -15,7 +16,7 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
     mbRTUModel = model;
 
     connected = false;
-    modbusDevice = new QModbusRtuSerialServer(parent);
+    modbusDevice = new MySerialRTUServer(parent);   //QModbusRtuSerialServer(parent);
 
     if (modbusDevice->state() == QModbusDevice::UnconnectedState){
         if (mbRTUModel->AvailablePorts().length() > 0){

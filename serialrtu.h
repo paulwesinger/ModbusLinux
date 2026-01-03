@@ -4,6 +4,7 @@
 #include <QModbusServer>
 #include <QSerialPortInfo>
 #include <serialrtumodel.h>
+#include "myserialrtuserver.h"
 
 class SerialRTu :QObject
 {
@@ -15,15 +16,17 @@ public:
     bool Init(ModbusRTUModel *model,QObject * parent = nullptr);
     QModbusServer * ModbusServer();
     bool Connected();
+    MySerialRTUServer *modbusDevice = nullptr;
 
 protected:
     bool connected = false;
     ModbusRTUModel * mbRTUModel = nullptr;
 
+
 private slots:
 
 private :
-    QModbusServer *modbusDevice = nullptr;
+    //QModbusServer *modbusDevice = nullptr;
 
 signals:
 };

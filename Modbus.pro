@@ -14,6 +14,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     modbus.cpp \
+    myserialrtuserver.cpp \
     serialrtu.cpp \
     serialrtumodel.cpp
 
@@ -22,6 +23,7 @@ HEADERS += \
     checksum.h \
     mainwindow.h \
     modbus.h \
+    myserialrtuserver.h \
     serialrtu.h \
     serialrtumodel.h
 

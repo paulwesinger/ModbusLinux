@@ -73,6 +73,9 @@ void MainWindow::Init(){
              ui->cmbDataBits->addItem(mbRTUModel->DataBits()[i].text, mbRTUModel->DataBits()[i].value);
              if (mbRTUModel->DataBits()[i].value == mbRTUModel->Ports()[0]->dataBits())
                  ui->cmbDataBits->setCurrentIndex(i);
+        }
+         if (serialRTU->modbusDevice->open()){
+
          }
     }
 
@@ -111,6 +114,12 @@ void MainWindow::onTakeSettings(){
 
     // vec1.insert(vec1.end(), vec2.begin(), vec2.end());
     protokoll.insert(protokoll.end(),crc.begin(),crc.end());
+    QByteArray img (reinterpret_cast<const char*>(protokoll.data()), protokoll.size());
+
+    QModbusResponse request(QModbusResponse::ReadCoils,img);
+    QModbusResponse res = serialRTU->modbusDevice->processRequest(request);
+
+
 
 }
 
