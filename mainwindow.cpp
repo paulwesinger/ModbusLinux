@@ -114,8 +114,8 @@ void MainWindow::onTakeSettings(){
     std::vector<ubyte> crc = CheckSum::CRCModbus(protokoll);
 
     // vec1.insert(vec1.end(), vec2.begin(), vec2.end());
-    protokoll.insert(protokoll.end(),crc.begin(),crc.end());
-    QByteArray img (reinterpret_cast<const char*>(protokoll.data()), protokoll.size());
+    //protokoll.insert(protokoll.end(),crc.begin(),crc.end());
+   // QByteArray img (reinterpret_cast<const char*>(protokoll.data()), protokoll.size());
 
     //QModbusResponse response(QModbusResponse::ReadCoils,QByteArray::fromHex("010380000001ADCA"));
     //QModbusResponse res = serialRTU->modbusDevice->processRequest(response);

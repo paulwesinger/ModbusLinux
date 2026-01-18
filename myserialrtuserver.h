@@ -11,8 +11,8 @@ class MySerialRTUClient :public QModbusRtuSerialClient
 public:
     MySerialRTUClient(QObject * parent);
 //    virtual QModbusResponse processResponse(QModbusResponse response,QDataUnit &du);
-    virtual bool open() override;
-    virtual void close() override;
+//    virtual bool open() override;
+//    virtual void close() override;
 
 };
 

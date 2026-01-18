@@ -10,7 +10,6 @@ MySerialRTUClient::MySerialRTUClient(QObject* parent)
 QModbusResponse MySerialRTUClient::processResponse(const QModbusPdu &request,QDataUnit& du){
     return QModbusRtuSerialClient::processResponse(request,du);
 }
-*/
 
 bool MySerialRTUClient::open(){
     QModbusRtuSerialClient::open();
@@ -19,3 +18,4 @@ bool MySerialRTUClient::open(){
 void MySerialRTUClient::close(){
     QModbusRtuSerialClient::close();
 }
+*/
