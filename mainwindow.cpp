@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QSerialPortInfo>
 #include <QSerialPort>
+#include <QThread>
 #include "checksum.h"
 
 
@@ -74,11 +75,11 @@ void MainWindow::Init(){
              if (mbRTUModel->DataBits()[i].value == mbRTUModel->Ports()[0]->dataBits())
                  ui->cmbDataBits->setCurrentIndex(i);
         }
+
          if (serialRTU->modbusDevice->open()){
 
          }
     }
-
 }
 
 
@@ -106,7 +107,7 @@ void MainWindow::onTakeSettings(){
     /// test Checksum 01 01 00 00 00 08    3D CC
     /// Data von Waveshare relais
     /// ******************************************
-    std::vector<ubyte> protokoll {0x01,0x01,0x00,0x00,0x00,0x08};
+    std::vector<ubyte> protokoll {0x00,0x03,0x40,0x00,0x00,0x01};
 
     /// funktioniert
     /// !!!
@@ -116,8 +117,12 @@ void MainWindow::onTakeSettings(){
     protokoll.insert(protokoll.end(),crc.begin(),crc.end());
     QByteArray img (reinterpret_cast<const char*>(protokoll.data()), protokoll.size());
 
-    QModbusResponse request(QModbusResponse::ReadCoils,img);
-    QModbusResponse res = serialRTU->modbusDevice->processRequest(request);
+    QModbusResponse response(QModbusResponse::ReadCoils,QByteArray::fromHex("010380000001ADCA"));
+    QModbusResponse res = serialRTU->modbusDevice->processRequest(response);
+   // serialRTU->modbusDevice->readData()
+
+    QThread::msleep(1100);
+    QByteArray retdata = res.data();
 
 
 

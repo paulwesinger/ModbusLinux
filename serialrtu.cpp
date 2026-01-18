@@ -8,7 +8,10 @@ SerialRTu::SerialRTu(QObject *parent)
 
 }
 SerialRTu::~SerialRTu(){
+
+    modbusDevice->close();
     modbusDevice->disconnectDevice();
+
     delete mbRTUModel;
 }
 bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
