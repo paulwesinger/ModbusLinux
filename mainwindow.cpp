@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::Initconnections(){
-    connect(serialRTU->ModbusServer(),&QModbusServer::stateChanged,this,&MainWindow::onStateChanged);
-    connect(serialRTU->ModbusServer(),&QModbusServer::dataWritten,this,&MainWindow::onDataWritten);
+    connect(serialRTU->ModbusClient(),&QModbusClient::stateChanged,this,&MainWindow::onStateChanged);
+    //connect(serialRTU->ModbusClient(),&QModbusClient::dataWritten,this,&MainWindow::onDataWritten);
     connect(ui->cmbDataBits,&QComboBox::currentIndexChanged,this,&MainWindow::onComboDataBitsIndexChanged);
     connect(ui->pbTakeSettings,&QPushButton::clicked,this,&MainWindow::onTakeSettings);
 }
@@ -117,12 +117,12 @@ void MainWindow::onTakeSettings(){
     protokoll.insert(protokoll.end(),crc.begin(),crc.end());
     QByteArray img (reinterpret_cast<const char*>(protokoll.data()), protokoll.size());
 
-    QModbusResponse response(QModbusResponse::ReadCoils,QByteArray::fromHex("010380000001ADCA"));
-    QModbusResponse res = serialRTU->modbusDevice->processRequest(response);
+    //QModbusResponse response(QModbusResponse::ReadCoils,QByteArray::fromHex("010380000001ADCA"));
+    //QModbusResponse res = serialRTU->modbusDevice->processRequest(response);
    // serialRTU->modbusDevice->readData()
 
     QThread::msleep(1100);
-    QByteArray retdata = res.data();
+  //  QByteArray retdata = res.data();
 
 
 

@@ -1,19 +1,21 @@
 #include "myserialrtuserver.h"
 
-MySerialRTUServer::MySerialRTUServer(QObject* parent)
-    :QModbusRtuSerialServer(parent)
+MySerialRTUClient::MySerialRTUClient(QObject* parent)
+    :QModbusRtuSerialClient(parent)
 {
 
 }
 
-QModbusResponse MySerialRTUServer::processRequest(const QModbusPdu &request){
-    return QModbusRtuSerialServer::processRequest(request);
+/*
+QModbusResponse MySerialRTUClient::processResponse(const QModbusPdu &request,QDataUnit& du){
+    return QModbusRtuSerialClient::processResponse(request,du);
+}
+*/
+
+bool MySerialRTUClient::open(){
+    QModbusRtuSerialClient::open();
 }
 
-bool MySerialRTUServer::open(){
-    QModbusRtuSerialServer::open();
-}
-
-void MySerialRTUServer::close(){
-    QModbusRtuSerialServer::close();
+void MySerialRTUClient::close(){
+    QModbusRtuSerialClient::close();
 }

@@ -1,14 +1,16 @@
 #ifndef MYSERIALRTUSERVER_H
 #define MYSERIALRTUSERVER_H
 
-#include <QModbusRtuSerialServer>
+//#include <QModbusRtuSerialServer>
+#include <QModbusRtuSerialClient>
 #include <QModbusResponse>
 
-class MySerialRTUServer :public QModbusRtuSerialServer
+
+class MySerialRTUClient :public QModbusRtuSerialClient
 {
 public:
-    MySerialRTUServer(QObject * parent);
-    virtual QModbusResponse processRequest(const QModbusPdu &request) override;
+    MySerialRTUClient(QObject * parent);
+//    virtual QModbusResponse processResponse(QModbusResponse response,QDataUnit &du);
     virtual bool open() override;
     virtual void close() override;
 

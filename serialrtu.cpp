@@ -19,7 +19,7 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
     mbRTUModel = model;
 
     connected = false;
-    modbusDevice = new MySerialRTUServer(parent);   //QModbusRtuSerialServer(parent);
+    modbusDevice = new MySerialRTUClient(parent);   //QModbusRtuSerialServer(parent);
 
     if (modbusDevice->state() == QModbusDevice::UnconnectedState){
         if (mbRTUModel->AvailablePorts().length() > 0){
@@ -54,7 +54,7 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
     }
     return connected;
 }
-QModbusServer* SerialRTu::ModbusServer(){
+QModbusClient* SerialRTu::ModbusClient(){
     return modbusDevice;
 }
 
