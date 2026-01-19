@@ -39,6 +39,7 @@ private slots:
     void onDataWritten(QModbusDataUnit::RegisterType table, int address, int size);
     void onComboDataBitsIndexChanged(int index);
     void onTakeSettings();
+    void SendTelegrammclicked();
 
 private:
     void Initconnections();

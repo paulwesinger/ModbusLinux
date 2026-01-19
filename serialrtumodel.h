@@ -25,7 +25,7 @@ public:
     /// Die PortInfos anhand des Comboboxindexes
     /// ermitteln mit Bereichscheck
     /// ****************************************
-    QSerialPortInfo *(GetPort(int index));
+    QSerialPortInfo *GetPort(int index);
 
     /// *****************************************
     /// Hilfsfunktion, Current gewählten Port

@@ -16,6 +16,7 @@ public:
     bool Init(ModbusRTUModel *model,QObject * parent = nullptr);
     QModbusClient * ModbusClient();
     bool Connected();
+    void DisConnect();
     MySerialRTUClient *modbusDevice = nullptr;
 
 protected:

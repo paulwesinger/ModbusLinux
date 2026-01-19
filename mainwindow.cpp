@@ -22,6 +22,7 @@ void MainWindow::Initconnections(){
     //connect(serialRTU->ModbusClient(),&QModbusClient::dataWritten,this,&MainWindow::onDataWritten);
     connect(ui->cmbDataBits,&QComboBox::currentIndexChanged,this,&MainWindow::onComboDataBitsIndexChanged);
     connect(ui->pbTakeSettings,&QPushButton::clicked,this,&MainWindow::onTakeSettings);
+    connect(ui->pbTelegram,&QPushButton::clicked,this,&MainWindow::SendTelegrammclicked);
 }
 
 void MainWindow::Init(){
@@ -29,7 +30,7 @@ void MainWindow::Init(){
     mbRTUModel = new ModbusRTUModel();
     serialRTU = new SerialRTu(this);
 
-    if (serialRTU->Init(mbRTUModel,this)){
+    if ( serialRTU->Init(mbRTUModel,this)){
         for (auto i= 0; i< mbRTUModel->Ports().length(); i++){
             ui->cmboPorts->addItem(mbRTUModel->Ports()[i]->portName());
         }
@@ -76,9 +77,7 @@ void MainWindow::Init(){
                  ui->cmbDataBits->setCurrentIndex(i);
         }
 
-         if (serialRTU->modbusDevice->open()){
 
-         }
     }
 }
 
@@ -92,11 +91,19 @@ void MainWindow::onStateChanged(QModbusDevice::State state) {
 
     switch (state){
     case QModbusDevice::ConnectedState:  break;
-    case QModbusDevice::ClosingState: break;
+    case QModbusDevice::ClosingState:
+        if(serialRTU->Connected()) {
+            serialRTU->DisConnect();
+        }
+        break ;
     default:
 
         break;
     }
+}
+
+void MainWindow::SendTelegrammclicked(){
+
 }
 void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
     bool wurscht = true;
@@ -121,14 +128,8 @@ void MainWindow::onTakeSettings(){
     //QModbusResponse res = serialRTU->modbusDevice->processRequest(response);
    // serialRTU->modbusDevice->readData()
 
-    QThread::msleep(1100);
   //  QByteArray retdata = res.data();
-
-
-
 }
-
-
 
 
 MainWindow::~MainWindow()
