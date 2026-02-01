@@ -19,6 +19,8 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
 
     connected = false;
     modbusDevice = new MySerialRTUClient(parent);   //QModbusRtuSerialServer(parent);
+    modbusDevice->setTimeout(300);
+    modbusDevice->setNumberOfRetries(3);
 
     if (modbusDevice->state() == QModbusDevice::UnconnectedState){
         if (mbRTUModel->AvailablePorts().length() > 0){

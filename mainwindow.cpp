@@ -24,6 +24,7 @@ void MainWindow::Initconnections(){
     connect(ui->cmbDataBits,&QComboBox::currentIndexChanged,this,&MainWindow::onComboDataBitsIndexChanged);
     connect(ui->pbTakeSettings,&QPushButton::clicked,this,&MainWindow::onTakeSettings);
     connect(ui->pbTelegram,&QPushButton::clicked,this,&MainWindow::SendTelegrammclicked);
+    connect(ui->pbReadRelayState,&QPushButton::clicked,this,&MainWindow::ReadRelaystate);
 }
 
 void MainWindow::Init(){
@@ -106,6 +107,31 @@ void MainWindow::onStateChanged(QModbusDevice::State state) {
 void MainWindow::SendTelegrammclicked(){
 
 }
+
+void MainWindow::replyFinished(){
+    QModbusReply * reply = qobject_cast<QModbusReply*>(sender());
+    const QModbusDataUnit result = reply->result();
+}
+
+
+void MainWindow::ReadRelaystate(){
+    QModbusDataUnit readUnit(QModbusDataUnit::Coils,00000,4);
+
+
+    if (auto * reply = serialRTU->modbusDevice->sendReadRequest(readUnit,1)){
+        if (! reply->isFinished()){
+            connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
+        }
+        else{
+            delete reply;
+        }
+    }
+
+
+
+
+
+}
 void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
     bool wurscht = true;
 }
@@ -129,25 +155,31 @@ void MainWindow::onTakeSettings(){
 
 
     // Test Waveshare Relay Relay 1 on
-    /*
-    QByteArray<qint8> protokoll;
-    protokoll.append(0);
+/*
+    QList<qint16> protokoll;
+    protokoll.append(1);
     protokoll.append(5);
     protokoll.append(0);
-    protokoll.append(1);
+    protokoll.append(0);
     protokoll.append(0xFF);
     protokoll.append(0);
-    protokoll.append(0xDD);
-    protokoll.append(0xFA);
+    protokoll.append(0x8C);
+    protokoll.append(0x3A);
 */
-    //QModbusRequest request(QModbusPdu::WriteSingleCoil,0x01,0x05,0x0,0x01,0xff,0x0,0xDD,0xFA);
-    QModbusRequest request(QModbusPdu::WriteSingleCoil,QByteArray::fromHex("01050001ff00ddfa"));
+  //  QModbusDataUnit du(QModbusPdu::ReadCoils,0,protokoll);
+  //  QModbusReply* repley = serialRTU->modbusDevice->sendWriteRequest(du,1);
+
+
+    QModbusRequest request(QModbusPdu::WriteSingleCoil,QByteArray::fromHex("01050001ff00DDFA"));
+
+    QModbusReply* repley = serialRTU->modbusDevice->sendRawRequest(request,1);
+   // QModbusRequest request(QModbusPdu::ReadSingleCoil,QByteArray::fromHex("0101000000083dcc"));
    // QByteArray img (reinterpret_cast<const char*>(protokoll.data()), protokoll.size());
 
-    bool isvalid = request.isValid();
-    QModbusReply* repley = serialRTU->modbusDevice->sendRawRequest(request,1);
+    //bool isvalid = request.isValid();
+    //QModbusReply* repley = serialRTU->modbusDevice->sendReadRequest(request,1);//   sendRawRequest(request,1);
 
-    //QModbusResponse response(QModbusResponse::ReadCoils,QByteArray::fromHex("010380000001ADCA"));
+    //QModbusResponse response(QModbusResponse::ReadCoils,QByteArray::fromHex("010580000001ADCA"));
     //QModbusResponse res = serialRTU->modbusDevice->processRequest(response);
    // serialRTU->modbusDevice->readData()
 

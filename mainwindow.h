@@ -34,12 +34,17 @@ protected:
     SerialRTu * serialRTU = nullptr;
     ModbusRTUModel * mbRTUModel = nullptr;
 
+    QModbusReply * reply = nullptr;
+
 private slots:
     void onStateChanged(QModbusDevice::State state);
     void onDataWritten(QModbusDataUnit::RegisterType table, int address, int size);
     void onComboDataBitsIndexChanged(int index);
     void onTakeSettings();
     void SendTelegrammclicked();
+    void ReadRelaystate();
+
+    void replyFinished();
 
 private:
     void Initconnections();
