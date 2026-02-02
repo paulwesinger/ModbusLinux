@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>881</width>
-    <height>600</height>
+    <height>956</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -97,9 +97,9 @@
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>40</y>
+      <y>30</y>
       <width>551</width>
-      <height>231</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -133,6 +133,26 @@
     </property>
     <property name="text">
      <string>Relay Status</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listResponse">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>331</y>
+      <width>281</width>
+      <height>571</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="leRequest">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>290</y>
+      <width>421</width>
+      <height>31</height>
+     </rect>
     </property>
    </widget>
   </widget>

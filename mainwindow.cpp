@@ -111,14 +111,53 @@ void MainWindow::SendTelegrammclicked(){
 void MainWindow::replyFinished(){
     QModbusReply * reply = qobject_cast<QModbusReply*>(sender());
     const QModbusDataUnit result = reply->result();
+
+    QString item = "";
+    for(auto i = 0; i< result.values().count();i++){
+
+        QString tmp = QString::number(result.value(i),16);
+        item.append(tmp);
+        item.append("-");
+    }
+    ui->listResponse->addItem(item);
 }
 
 
 void MainWindow::ReadRelaystate(){
-    QModbusDataUnit readUnit(QModbusDataUnit::Coils,00000,4);
+    QModbusDataUnit writeUnit(QModbusDataUnit::Coils);
+
+    QList<quint16> values({0x01,0x01,0x0,0x1,0x0,0x6});
+
+    QList<quint16> crc = CheckSum::CRCModbus(values);
+
+    values.append(crc);
 
 
-    if (auto * reply = serialRTU->modbusDevice->sendReadRequest(readUnit,1)){
+/*
+    values.append((qint16) 1);
+    values.append((qint16) 5);
+    values.append((qint16) 0);
+    values.append((qint16) 1);
+    values.append((qint16) 255);
+    values.append((qint16) 0);
+    values.append((qint16) 0xDD);
+*/
+    writeUnit.setValues(values);
+/*
+
+    writeUnit.setValueCount(8);
+    writeUnit.setValue(0,(qint16) 1);
+    writeUnit.setValue(1,(qint16) 5);
+    writeUnit.setValue(2,(qint16) 0);
+    writeUnit.setValue(3,(qint16) 1);
+    writeUnit.setValue(4,(qint16) 255);
+    writeUnit.setValue(5,(qint16) 0);
+    writeUnit.setValue(6,(qint16) 0xDD);
+*/
+
+//01 05 00 00 FF 00 8C 3A
+
+    if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
         if (! reply->isFinished()){
             connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
         }
@@ -126,11 +165,6 @@ void MainWindow::ReadRelaystate(){
             delete reply;
         }
     }
-
-
-
-
-
 }
 void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
     bool wurscht = true;

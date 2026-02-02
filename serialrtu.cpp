@@ -47,6 +47,7 @@ bool SerialRTu::Init(ModbusRTUModel *model,QObject *parent)
                     modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter,parity);
                     modbusDevice->setConnectionParameter(QModbusDevice::SerialStopBitsParameter,stopbits);
                     modbusDevice->setConnectionParameter(QModbusDevice::SerialPortNameParameter,portname);
+                    modbusDevice->setConnectionParameter(QModbusDevice::NetworkPortParameter,502);
 
                     connected = modbusDevice->connectDevice();
                 }
