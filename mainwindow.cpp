@@ -25,10 +25,17 @@ void MainWindow::Initconnections(){
     connect(ui->pbTakeSettings,&QPushButton::clicked,this,&MainWindow::onTakeSettings);
     connect(ui->pbTelegram,&QPushButton::clicked,this,&MainWindow::SendTelegrammclicked);
     connect(ui->pbReadRelayState,&QPushButton::clicked,this,&MainWindow::ReadRelaystate);
+    connect(ui->pbRequest,&QPushButton::clicked,this,&MainWindow::sendRequestClicked);
+    connect(ui->pbFirmware,&QPushButton::clicked,this,&MainWindow::ReadVersionClicked);
 }
 
 void MainWindow::Init(){
     QString msg;
+
+    model = new QStringListModel();
+
+    ui->lvResponse->setModel(model);
+
     mbRTUModel = new ModbusRTUModel();
     serialRTU = new SerialRTu(this);
 
@@ -104,29 +111,127 @@ void MainWindow::onStateChanged(QModbusDevice::State state) {
     }
 }
 
+
+
 void MainWindow::SendTelegrammclicked(){
 
+}
+
+void MainWindow::ReadVersionClicked(){
+    QString tmp = ui->leRequest->text();
+    // eingabe: hex hex hex ...
+    QList<quint16> requestValues;
+    if ( ! tmp.isEmpty()){
+        QStringList list = tmp.split(' ');
+        if (! list.empty() ){
+            requestValues = ConvertStringToNumber(list);
+            QList<quint16> crc = CheckSum::CRCModbus(requestValues);
+            requestValues.append(crc);
+
+            QString item = "Request: ";
+            foreach(QString elem,list){
+                item.append("0x");
+                item.append( elem);
+                item.append("-");
+            }
+            QStringList strlist = model->stringList();
+            strlist.append(item);
+            model->setStringList(strlist);
+
+            // send request
+
+            QModbusDataUnit readunit(QModbusDataUnit::Coils);
+            readunit.setValues(requestValues);
+
+            if (auto * reply = serialRTU->modbusDevice->sendReadRequest(readunit,1))
+            {
+                if (! reply->isFinished()){
+                    connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
+                }
+                else{
+                    delete reply;
+                }
+            }
+        }
+    }
+}
+
+
+QList<quint16> MainWindow::ConvertStringToNumber(QStringList values){
+    QList<quint16> tmplist;
+    if ( ! values.isEmpty()){
+        foreach (QString elem,values) {
+            bool ok;
+            quint16 tmp = elem.toUShort(&ok,16);
+            if (ok){
+                tmplist.append(tmp);
+            }
+        }
+        return tmplist;
+    }
+}
+
+
+void MainWindow::sendRequestClicked(){
+    QString tmp = ui->leRequest->text();
+
+    // eingabe: hex hex hex ...
+
+    QList<quint16> requestValues;
+    if ( ! tmp.isEmpty()){
+        QStringList list = tmp.split(' ');
+         if (! list.empty() ){
+            requestValues = ConvertStringToNumber(list);
+            QList<quint16> crc = CheckSum::CRCModbus(requestValues);
+            requestValues.append(crc);
+
+            QString item = "Request: ";
+            foreach(QString elem,list){
+                item.append("0x");
+                item.append( elem);
+                item.append("-");
+            }
+            QStringList strlist = model->stringList();
+            strlist.append(item);
+            model->setStringList(strlist);
+
+            // send request
+            QModbusDataUnit writeUnit(QModbusDataUnit::Coils);
+            writeUnit.setValues(requestValues);
+            if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
+                if (! reply->isFinished()){
+                    connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
+                }
+                else{
+                    delete reply;
+                }
+            }
+        }
+    }
 }
 
 void MainWindow::replyFinished(){
     QModbusReply * reply = qobject_cast<QModbusReply*>(sender());
     const QModbusDataUnit result = reply->result();
 
-    QString item = "";
+    QString item = "Response: ";
     for(auto i = 0; i< result.values().count();i++){
 
         QString tmp = QString::number(result.value(i),16);
         item.append(tmp);
         item.append("-");
     }
-    ui->listResponse->addItem(item);
+
+    QStringList strlist = model->stringList();
+    strlist.append(item);
+    model->setStringList(strlist);
 }
 
 
 void MainWindow::ReadRelaystate(){
     QModbusDataUnit writeUnit(QModbusDataUnit::Coils);
 
-    QList<quint16> values({0x01,0x01,0x0,0x1,0x0,0x6});
+    QList<quint16> values({0x01,0x05,0x0,0x6,0x0,0x0});
 
     QList<quint16> crc = CheckSum::CRCModbus(values);
 
@@ -156,6 +261,14 @@ void MainWindow::ReadRelaystate(){
 */
 
 //01 05 00 00 FF 00 8C 3A
+
+    QString st = "";
+    foreach (quint16 val, values) {
+        st += QString::number(val,16) + "- ";
+    }
+
+
+    model->stringList().append(st);
 
     if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
         if (! reply->isFinished()){

@@ -5,6 +5,7 @@
 #include <QModbusRtuSerialServer>
 #include "serialrtu.h"
 #include "serialrtumodel.h"
+#include <QStringListModel>
 
 #include "Rs485.h"
 //#include "modbusrs485.h"
@@ -34,7 +35,10 @@ protected:
     SerialRTu * serialRTU = nullptr;
     ModbusRTUModel * mbRTUModel = nullptr;
 
+    QStringListModel *model = nullptr;
     QModbusReply * reply = nullptr;
+
+    QList<quint16> ConvertStringToNumber(QStringList values);
 
 private slots:
     void onStateChanged(QModbusDevice::State state);
@@ -43,8 +47,10 @@ private slots:
     void onTakeSettings();
     void SendTelegrammclicked();
     void ReadRelaystate();
+    void ReadVersionClicked();
 
     void replyFinished();
+    void sendRequestClicked();
 
 private:
     void Initconnections();

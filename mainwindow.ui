@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>881</width>
-    <height>956</height>
+    <height>1007</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -135,16 +135,6 @@
      <string>Relay Status</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="listResponse">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>331</y>
-      <width>281</width>
-      <height>571</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="leRequest">
     <property name="geometry">
      <rect>
@@ -153,6 +143,42 @@
       <width>421</width>
       <height>31</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QListView" name="lvResponse">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>380</y>
+      <width>501</width>
+      <height>561</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbRequest">
+    <property name="geometry">
+     <rect>
+      <x>202</x>
+      <y>290</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send Request</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbFirmware">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>320</y>
+      <width>91</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Version</string>
     </property>
    </widget>
   </widget>
