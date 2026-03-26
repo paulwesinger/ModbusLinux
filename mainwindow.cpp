@@ -28,7 +28,16 @@ void MainWindow::Initconnections(){
     connect(ui->pbRequest,&QPushButton::clicked,this,&MainWindow::sendRequestClicked);
     connect(ui->pbFirmware,&QPushButton::clicked,this,&MainWindow::ReadVersionClicked);
 
+    // Relais mit slot verbinden
     connect(ui->rbRelay_1,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
+    connect(ui->rbRelay_2,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
+    connect(ui->rbRelay_3,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
+    connect(ui->rbRelay_4,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
+    connect(ui->rbRelay_5,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
+    connect(ui->rbRelay_6,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
+    connect(ui->rbRelay_7,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
+    connect(ui->rbRelay_8,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
+
 }
 
 void MainWindow::Init(){
@@ -104,45 +113,85 @@ void MainWindow::SetCheckState(Qt::CheckState state){
     if ( ! cb )
         return;
 
-
-
     QModbusDataUnit writeUnit(QModbusDataUnit::Coils);
-    QList<quint16> values {0x01,0x05};//0x0,0x6,0x0,0x0};
+
+
+    quint16 comand = 0x01 <<  8;   // adresse
+    comand |= 0x05;
+
+    QList<quint16> values{0x1,0x5};
 
     // die adresse zum einfügen
     QList<quint16> relais;
 
-    //
-    if (cb->objectName() == "rbRelay_1"){
-        qDebug()<< cb->objectName();
-        relais.append(0x0);
-        relais.append(0x0);
+    //Relais nummer extrahieren
 
-        if (cb->isChecked()){
-            relais.append(0xFF);
+    QString relaisname = cb->objectName();
+
+
+    if (relaisname.length() > 0)
+    {
+        bool ok;
+        QString relaynameasstring = relaisname;
+
+        QString relaisnumber =  relaisname[relaisname.length()-1];
+
+
+        quint16 number = relaisnumber.toUInt(&ok,16);
+        number --;
+        qDebug()<<relaynameasstring;
+
+         statusBar()->showMessage(relaisname);
+
+         if (ok) {
+
             relais.append(0x0);
-        }
-        else{
-            relais.append(0x0);
-            relais.append(0x0);
-        }
+            relais.append(number);
+         }
+         else
+             return;
+
     }
+    else
+        return;
 
+    if (cb->isChecked()){
+        relais.append(0xFF );
+        relais.append(0x0);
+    }
+    else{
+        relais.append(0x0);
+        relais.append(0x0);
+    }
     values.append(relais);
-    QList<quint16> crc = CheckSum::CRCModbus(values);
 
+
+
+    // values.clear();
+    // values.append(0x01);
+    // values.append(0x05);
+    // values.append(0x00);
+    // values.append(0x08);
+    // values.append(0xFF);
+    // values.append(0x00);
+
+
+
+
+    QList<quint16> crc = CheckSum::CRCModbus(values);
     values.append(crc);
     writeUnit.setValues(values);
 
     // ----------------------------
     // Ausgabe in ie Konsole
     // ----------------------------
-    QString st = "";
+    QString st = "Request: ";
     foreach (quint16 val, values) {
         st += QString::number(val,16) + "- ";
     }
 
-    model->stringList().append(st);
+    qDebug() << st;
+
 
     if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
         if (! reply->isFinished()){
