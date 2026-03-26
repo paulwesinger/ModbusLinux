@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QCheckBox>
 #include <QModbusRtuSerialServer>
 #include "serialrtu.h"
 #include "serialrtumodel.h"
@@ -48,6 +49,7 @@ private slots:
     void SendTelegrammclicked();
     void ReadRelaystate();
     void ReadVersionClicked();
+    void SetCheckState(Qt::CheckState state);
 
     void replyFinished();
     void sendRequestClicked();

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>881</width>
+    <width>1090</width>
     <height>1007</height>
    </rect>
   </property>
@@ -98,8 +98,8 @@
      <rect>
       <x>320</x>
       <y>30</y>
-      <width>551</width>
-      <height>241</height>
+      <width>761</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -108,6 +108,74 @@
     <property name="frameShadow">
      <enum>QFrame::Shadow::Raised</enum>
     </property>
+    <widget class="QWidget" name="gridLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>761</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="rbRelay_1">
+        <property name="text">
+         <string>Relais 1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="rbRelay_3">
+        <property name="text">
+         <string>Relais 3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QCheckBox" name="rbRelay_4">
+        <property name="text">
+         <string>Relais 4</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="rbRelay_5">
+        <property name="text">
+         <string>Relais 5</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="rbRelay_6">
+        <property name="text">
+         <string>Relais 6</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QCheckBox" name="rbRelay_8">
+        <property name="text">
+         <string>Relais 8</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="rbrelay_2">
+        <property name="text">
+         <string>Relais 2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="rbrelay_7">
+        <property name="text">
+         <string>Relais 7</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <widget class="QPushButton" name="pbTelegram">
     <property name="geometry">
@@ -150,7 +218,7 @@
      <rect>
       <x>20</x>
       <y>380</y>
-      <width>501</width>
+      <width>471</width>
       <height>561</height>
      </rect>
     </property>
@@ -187,7 +255,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>881</width>
+     <width>1090</width>
      <height>23</height>
     </rect>
    </property>

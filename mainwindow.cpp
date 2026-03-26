@@ -27,6 +27,8 @@ void MainWindow::Initconnections(){
     connect(ui->pbReadRelayState,&QPushButton::clicked,this,&MainWindow::ReadRelaystate);
     connect(ui->pbRequest,&QPushButton::clicked,this,&MainWindow::sendRequestClicked);
     connect(ui->pbFirmware,&QPushButton::clicked,this,&MainWindow::ReadVersionClicked);
+
+    connect(ui->rbRelay_1,&QCheckBox::checkStateChanged,this,&MainWindow::SetCheckState);
 }
 
 void MainWindow::Init(){
@@ -96,7 +98,67 @@ void MainWindow::onComboDataBitsIndexChanged(int index){
     int bits = selected.toInt();
 }
 
+void MainWindow::SetCheckState(Qt::CheckState state){
+
+    QCheckBox *cb = qobject_cast<QCheckBox*>(sender());
+    if ( ! cb )
+        return;
+
+
+
+    QModbusDataUnit writeUnit(QModbusDataUnit::Coils);
+    QList<quint16> values {0x01,0x05};//0x0,0x6,0x0,0x0};
+
+    // die adresse zum einfügen
+    QList<quint16> relais;
+
+    //
+    if (cb->objectName() == "rbRelay_1"){
+        qDebug()<< cb->objectName();
+        relais.append(0x0);
+        relais.append(0x0);
+
+        if (cb->isChecked()){
+            relais.append(0xFF);
+            relais.append(0x0);
+        }
+        else{
+            relais.append(0x0);
+            relais.append(0x0);
+        }
+    }
+
+    values.append(relais);
+    QList<quint16> crc = CheckSum::CRCModbus(values);
+
+    values.append(crc);
+    writeUnit.setValues(values);
+
+    // ----------------------------
+    // Ausgabe in ie Konsole
+    // ----------------------------
+    QString st = "";
+    foreach (quint16 val, values) {
+        st += QString::number(val,16) + "- ";
+    }
+
+    model->stringList().append(st);
+
+    if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
+        if (! reply->isFinished()){
+            connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
+        }
+        else{
+            delete reply;
+        }
+    }
+
+
+
+}
+
 void MainWindow::onStateChanged(QModbusDevice::State state) {
+
 
     switch (state){
     case QModbusDevice::ConnectedState:  break;
