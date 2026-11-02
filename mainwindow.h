@@ -3,10 +3,20 @@
 
 #include <QMainWindow>
 #include <QCheckBox>
-#include <QModbusRtuSerialServer>
+//#include <QModbusRtuSerialServer>
 #include "serialrtu.h"
 #include "serialrtumodel.h"
 #include <QStringListModel>
+
+#include <QSerialPort>
+#include <QModbusDataUnit>
+#include <QModbusRtuSerialClient>
+#include <QModbusReply>
+#include <QtSerialPort/QSerialPortInfo>
+#include <QTimer>
+
+#include <QDebug>
+
 
 #include "Rs485.h"
 //#include "modbusrs485.h"
@@ -27,12 +37,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QList<QSerialPortInfo> AvailablePorts();
+
 
 protected:
     void Init();
-    //QModbusClient * mbClient;
-    //QModbusDevice * mbDevice;
-    //QModbusServer * mbServer;
     SerialRTu * serialRTU = nullptr;
     ModbusRTUModel * mbRTUModel = nullptr;
 
@@ -40,6 +49,7 @@ protected:
     QModbusReply * reply = nullptr;
 
     QList<quint16> ConvertStringToNumber(QStringList values);
+    QModbusRtuSerialClient * modbusClient;
 
 private slots:
     void onStateChanged(QModbusDevice::State state);
@@ -56,6 +66,8 @@ private slots:
 
 private:
     void Initconnections();
+
+    bool _PortOpen ;
 
     Ui::MainWindow *ui;
 };

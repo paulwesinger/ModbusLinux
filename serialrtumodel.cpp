@@ -19,11 +19,10 @@ ModbusRTUModel::~ModbusRTUModel(){
 
 void ModbusRTUModel::GetAvailablePorts(){
     _AvailablePorts = QSerialPortInfo::availablePorts();
+
+    _CurrentPort = new QSerialPort();
 }
 
-void ModbusRTUModel::addPort(QSerialPort* port){
-    _Ports.append(port);
-}
 
 
 
@@ -65,22 +64,22 @@ void ModbusRTUModel::InitStopBits(){
 ///**************************************
 /// Portinfo Methoden
 /// *************************************
-QSerialPortInfo * ModbusRTUModel::GetPort(int index){
+QSerialPort* ModbusRTUModel::CurrentPort(){
     // Area check
-    if (index > _AvailablePorts.length() - 1)
-        return nullptr;
-    return &_AvailablePorts[index];
+    // if (index > _AvailablePorts.length() - 1)
+    //     return nullptr;
+    return _CurrentPort;
 }
-
-
-QList<QSerialPort*>ModbusRTUModel::Ports(){
-    return _Ports;
+QString ModbusRTUModel::CurrentPortName(){
+    return _CurrentPortName;
 }
-
+void ModbusRTUModel::setCurrentPort(QSerialPortInfo &info){
+    _CurrentPortName = info.portName();
+    _CurrentPort->setPort(info);
+}
 QList<QSerialPortInfo> ModbusRTUModel::AvailablePorts(){
     return _AvailablePorts;
 }
-
 QList<stCombostruct> ModbusRTUModel::BaudRates(){
     return _BaudRates;
 }

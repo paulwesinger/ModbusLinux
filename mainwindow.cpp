@@ -40,19 +40,23 @@ void MainWindow::Initconnections(){
 
 }
 
+
+
 void MainWindow::Init(){
-    QString msg;
 
     model = new QStringListModel();
 
     ui->lvResponse->setModel(model);
 
     mbRTUModel = new ModbusRTUModel();
+    modbusClient = new QModbusRtuSerialClient();
 
-    // if ( serialRTU->Init(mbRTUModel,this)){
-    //     for (auto i= 0; i< mbRTUModel->Ports().length(); i++){
-    //         ui->cmboPorts->addItem(mbRTUModel->Ports()[i]->portName());
-    //     }
+    for (QSerialPortInfo info: mbRTUModel->AvailablePorts()){
+         ui->cmboPorts->addItem(info.portName());
+    }
+
+
+
 
 
     //     if (serialRTU->Connected()) {
@@ -70,7 +74,23 @@ void MainWindow::Init(){
     //     /// anhand der werte die indexes für die
     //     /// comboboxen holen und anzeigen
     //     /// ********************************************
-    //     ui->leSartbit->setText("1");
+    ui->leSartbit->setText("1");
+
+    for(auto info: mbRTUModel->BaudRates()){
+        ui->cmbBaudRate->addItem(info.text, QVariant(info.value));
+    }
+
+    for( auto info:mbRTUModel->StopBits()){
+         ui->cmbStopBits->addItem(info.text,QVariant(info.value));
+    }
+
+    for( auto info:mbRTUModel->Paritys()){
+        ui->cmbParity->addItem(info.text,QVariant(info.value));
+    }
+    for( auto info:mbRTUModel->DataBits()){
+        ui->cmbDataBits->addItem(info.text,QVariant(info.value));
+
+    }
 
     //     for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
     //         ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
@@ -81,7 +101,7 @@ void MainWindow::Init(){
     //      for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){
     //          ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
     //          if (mbRTUModel->StopBits()[i].value == mbRTUModel->Ports()[0]->stopBits())
-    //              ui->cmbStopBits->setCurrentIndex(i);
+    //              ui->cmbStopBits->setCurrentIndex(i);+++++++++++++++++++++++
     //      }
 
     //      for (auto i = 0; i<mbRTUModel->Paritys().length(); i++){
@@ -390,62 +410,57 @@ void MainWindow::ReadRelaystate(){
     // }
 }
 void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
-    bool wurscht = true;
+
 }
 void MainWindow::onTakeSettings(){
 
-    /// ******************************************
-    /// test Checksum 01 01 00 00 00 08    3D CC
-    /// Data von Waveshare relais
-    /// ******************************************
-    //std::vector<ubyte> protokoll {0x00,0x03,0x40,0x00,0x00,0x01};
+    modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, ui->cmboPorts->currentText()); //mbRTUModel->CurrentPort()); // Z.B. COM2 (über Nullmodem-Kabel mit COM1 verbunden)
+    modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, ui->cmbBaudRate->currentData().toInt());
+    modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, ui->cmbDataBits->currentData().toInt());
+    modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, ui->cmbParity->currentData().toInt());
+    modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, ui->cmbStopBits->currentData().toInt());
 
 
-    /// *******************************************
-    /// Protokoll fertig basteln:
-    /// *******************************************
-   // std::vector<ubyte> crc = CheckSum::CRCModbus(protokoll);
-
-   // vec1.insert(vec1.end(), vec2.begin(), vec2.end());
-   // protokoll.insert(protokoll.end(),crc.begin(),crc.end());
+    // Timeout und Wiederholungen einstellen
+    modbusClient->setTimeout(1000); // 1 Sekunde
+    modbusClient->setNumberOfRetries(3);
 
 
 
-    // Test Waveshare Relay Relay 1 on
-/*
-    QList<qint16> protokoll;
-    protokoll.append(1);
-    protokoll.append(5);
-    protokoll.append(0);
-    protokoll.append(0);
-    protokoll.append(0xFF);
-    protokoll.append(0);
-    protokoll.append(0x8C);
-    protokoll.append(0x3A);
-*/
-  //  QModbusDataUnit du(QModbusPdu::ReadCoils,0,protokoll);
-  //  QModbusReply* repley = serialRTU->modbusDevice->sendWriteRequest(du,1);
+    // Den aktuell ausgewählten Port(info) als Port öffnen:
+    // Erstmal den Port  init.
+    mbRTUModel->setCurrentPort(mbRTUModel->AvailablePorts()[ui->cmboPorts->currentIndex()]);
+    if (mbRTUModel->CurrentPort()->open(QIODeviceBase::ReadWrite) ){
+        qDebug() << "Port "<< mbRTUModel->CurrentPortName() << " offen";
+        _PortOpen = true;
 
 
-    QModbusRequest request(QModbusPdu::WriteSingleCoil,QByteArray::fromHex("01050001ff00DDFA"));
+    }
+    else{
+         qDebug() << "Port "<< mbRTUModel->CurrentPortName() << " NICHT offen  " << mbRTUModel->CurrentPort()->errorString() ;
+        _PortOpen = false;
+    }
 
-   // QModbusReply* repley = serialRTU->modbusDevice->sendRawRequest(request,1);
-   // QModbusRequest request(QModbusPdu::ReadSingleCoil,QByteArray::fromHex("0101000000083dcc"));
-   // QByteArray img (reinterpret_cast<const char*>(protokoll.data()), protokoll.size());
 
-    //bool isvalid = request.isValid();
-    //QModbusReply* repley = serialRTU->modbusDevice->sendReadRequest(request,1);//   sendRawRequest(request,1);
 
-    //QModbusResponse response(QModbusResponse::ReadCoils,QByteArray::fromHex("010580000001ADCA"));
-    //QModbusResponse res = serialRTU->modbusDevice->processRequest(response);
-   // serialRTU->modbusDevice->readData()
 
-  //  QByteArray retdata = res.data();
+
+    // 3. Client verbinden
+    if (!modbusClient->connectDevice()) {
+        qDebug() << "Fehler beim Verbinden des Modbus-Clients:" << modbusClient->errorString();
+    }
+
+    else{
+        qDebug() << "Ok";
+    }
 }
 
 
 MainWindow::~MainWindow()
 {
+
+    if (_PortOpen)
+        mbRTUModel->CurrentPort()->close();
     delete serialRTU;
     delete ui;
    // delete rs485;

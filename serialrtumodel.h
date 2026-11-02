@@ -25,14 +25,16 @@ public:
     /// Die PortInfos anhand des Comboboxindexes
     /// ermitteln mit Bereichscheck
     /// ****************************************
-    QSerialPortInfo *GetPort(int index);
+    QSerialPort *CurrentPort();
 
     /// *****************************************
     /// Hilfsfunktion, Current gewählten Port
     /// ohne Argument zurück geben ohne
     /// Bereichscheck
     /// *****************************************
-    QSerialPortInfo* CurrentPort();
+    QString CurrentPortName();
+    void setCurrentPort(QSerialPortInfo & info);
+
 
     /// *****************************************
     /// Den aktuellen Port anhand des Comboindex
@@ -40,18 +42,14 @@ public:
     /// false -> index out of range,
     /// true -> index ok
     /// *****************************************
-    bool SetCurrentPort(int index);
 
     QList<stCombostruct> BaudRates();
     QList<stCombostruct> DataBits();
     QList<stCombostruct> Paritys();
     QList<stCombostruct> StopBits();
 
-
     QList<QSerialPortInfo> AvailablePorts();
-    QList<QSerialPort*> Ports();
 
-    void addPort(QSerialPort* port);
 
 private:
     QList<QSerialPortInfo> _AvailablePorts;
@@ -61,6 +59,8 @@ private:
     QList<stCombostruct> _StopBits;
 
     QList<QSerialPort*> _Ports;
+    QString _CurrentPortName;
+    QSerialPort * _CurrentPort;
 
     void InitBaudRates();
     void InitDataBits();
