@@ -25,6 +25,8 @@ void ModbusRTUModel::addPort(QSerialPort* port){
     _Ports.append(port);
 }
 
+
+
 void ModbusRTUModel::InitBaudRates(){
     _BaudRates.append(stCombostruct("BD1200",1200));
     _BaudRates.append(stCombostruct("BD2400",2400));
