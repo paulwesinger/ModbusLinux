@@ -26,14 +26,17 @@ void ModbusRTUModel::addPort(QSerialPort* port){
 }
 
 void ModbusRTUModel::InitBaudRates(){
-    _BaudRates.append(stCombostruct("Baud1200",1200));
-    _BaudRates.append(stCombostruct("Baud2400",2400));
-    _BaudRates.append(stCombostruct("Baud4800",4800));
-    _BaudRates.append(stCombostruct("Baud9600",9600));
-    _BaudRates.append(stCombostruct("Baud19200",19200));
-    _BaudRates.append(stCombostruct("Baud38400",38400));
-    _BaudRates.append(stCombostruct("Baud57600",57600));
-    _BaudRates.append(stCombostruct("Baud115200",115200));
+    _BaudRates.append(stCombostruct("BD1200",1200));
+    _BaudRates.append(stCombostruct("BD2400",2400));
+    _BaudRates.append(stCombostruct("BD4800",4800));
+    _BaudRates.append(stCombostruct("BD9600",9600));
+    _BaudRates.append(stCombostruct("BD19200",19200));
+    _BaudRates.append(stCombostruct("BD38400",38400));
+    _BaudRates.append(stCombostruct("BD57600",57600));
+    _BaudRates.append(stCombostruct("BD115200",115200));
+    _BaudRates.append(stCombostruct("BD128000",128000));
+    _BaudRates.append(stCombostruct("BD250000",250000));
+    _BaudRates.append(stCombostruct("BD256000",256000));
 }
 
 void ModbusRTUModel::InitDataBits(){

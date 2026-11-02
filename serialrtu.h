@@ -17,11 +17,11 @@ public:
     QModbusClient * ModbusClient();
     bool Connected();
     void DisConnect();
-    MySerialRTUClient *modbusDevice = nullptr;
+  //  MySerialRTUClient *modbusDevice = nullptr;
 
 protected:
-    bool connected = false;
-    ModbusRTUModel * mbRTUModel = nullptr;
+    // bool connected = false;
+    // ModbusRTUModel * mbRTUModel = nullptr;
 
 
 private slots:

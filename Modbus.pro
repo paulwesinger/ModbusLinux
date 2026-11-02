@@ -9,22 +9,14 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Rs485.cpp \
     checksum.cpp \
     main.cpp \
     mainwindow.cpp \
-    modbus.cpp \
-    myserialrtuserver.cpp \
-    serialrtu.cpp \
     serialrtumodel.cpp
 
 HEADERS += \
-    Rs485.h \
     checksum.h \
     mainwindow.h \
-    modbus.h \
-    myserialrtuserver.h \
-    serialrtu.h \
     serialrtumodel.h
 
 FORMS += \

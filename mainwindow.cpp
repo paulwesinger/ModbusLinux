@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::Initconnections(){
-    connect(serialRTU->ModbusClient(),&QModbusClient::stateChanged,this,&MainWindow::onStateChanged);
+    //connect(serialRTU->ModbusClient(),&QModbusClient::stateChanged,this,&MainWindow::onStateChanged);
     //connect(serialRTU->ModbusClient(),&QModbusClient::dataWritten,this,&MainWindow::onDataWritten);
     connect(ui->cmbDataBits,&QComboBox::currentIndexChanged,this,&MainWindow::onComboDataBitsIndexChanged);
     connect(ui->pbTakeSettings,&QPushButton::clicked,this,&MainWindow::onTakeSettings);
@@ -48,57 +48,56 @@ void MainWindow::Init(){
     ui->lvResponse->setModel(model);
 
     mbRTUModel = new ModbusRTUModel();
-    serialRTU = new SerialRTu(this);
 
-    if ( serialRTU->Init(mbRTUModel,this)){
-        for (auto i= 0; i< mbRTUModel->Ports().length(); i++){
-            ui->cmboPorts->addItem(mbRTUModel->Ports()[i]->portName());
-        }
-
-
-        if (serialRTU->Connected()) {            
-            msg = tr("Verbunden mit: ");
-            msg.append(mbRTUModel->Ports()[0]->portName());
-        }
-        else{
-            msg = tr("Disconnected: ");
-            msg.append(mbRTUModel->Ports()[0]->portName());
-        }
-        this->statusBar()->showMessage(msg);
-
-        /// ********************************************
-        /// Erstmal alle verfügbaren einstellungen laden
-        /// anhand der werte die indexes für die
-        /// comboboxen holen und anzeigen
-        /// ********************************************
-        ui->leSartbit->setText("1");
-
-        for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
-            ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
-            if (mbRTUModel->BaudRates()[i].value == mbRTUModel->Ports()[0]->baudRate())
-                ui->cmbBaudRate->setCurrentIndex(i);
-        }
-
-         for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){
-             ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
-             if (mbRTUModel->StopBits()[i].value == mbRTUModel->Ports()[0]->stopBits())
-                 ui->cmbStopBits->setCurrentIndex(i);
-         }
-
-         for (auto i = 0; i<mbRTUModel->Paritys().length(); i++){
-             ui->cmbParity->addItem(mbRTUModel->Paritys()[i].text, mbRTUModel->Paritys()[i].value);
-             if (mbRTUModel->Paritys()[i].value == mbRTUModel->Ports()[0]->parity())
-                 ui->cmbParity->setCurrentIndex(i);
-         }
-
-         for (auto i = 0; i<mbRTUModel->DataBits().length(); i++){
-             ui->cmbDataBits->addItem(mbRTUModel->DataBits()[i].text, mbRTUModel->DataBits()[i].value);
-             if (mbRTUModel->DataBits()[i].value == mbRTUModel->Ports()[0]->dataBits())
-                 ui->cmbDataBits->setCurrentIndex(i);
-        }
+    // if ( serialRTU->Init(mbRTUModel,this)){
+    //     for (auto i= 0; i< mbRTUModel->Ports().length(); i++){
+    //         ui->cmboPorts->addItem(mbRTUModel->Ports()[i]->portName());
+    //     }
 
 
-    }
+    //     if (serialRTU->Connected()) {
+    //         msg = tr("Verbunden mit: ");
+    //         msg.append(mbRTUModel->Ports()[0]->portName());
+    //     }
+    //     else{
+    //         msg = tr("Disconnected: ");
+    //         msg.append(mbRTUModel->Ports()[0]->portName());
+    //     }
+    //     this->statusBar()->showMessage(msg);
+
+    //     /// ********************************************
+    //     /// Erstmal alle verfügbaren einstellungen laden
+    //     /// anhand der werte die indexes für die
+    //     /// comboboxen holen und anzeigen
+    //     /// ********************************************
+    //     ui->leSartbit->setText("1");
+
+    //     for (auto i = 0; i<mbRTUModel->BaudRates().length(); i++){
+    //         ui->cmbBaudRate->addItem(mbRTUModel->BaudRates()[i].text, mbRTUModel->BaudRates()[i].value);
+    //         if (mbRTUModel->BaudRates()[i].value == mbRTUModel->Ports()[0]->baudRate())
+    //             ui->cmbBaudRate->setCurrentIndex(i);
+    //     }
+
+    //      for (auto i = 0; i<mbRTUModel->StopBits().length(); i++){
+    //          ui->cmbStopBits->addItem(mbRTUModel->StopBits()[i].text, mbRTUModel->StopBits()[i].value);
+    //          if (mbRTUModel->StopBits()[i].value == mbRTUModel->Ports()[0]->stopBits())
+    //              ui->cmbStopBits->setCurrentIndex(i);
+    //      }
+
+    //      for (auto i = 0; i<mbRTUModel->Paritys().length(); i++){
+    //          ui->cmbParity->addItem(mbRTUModel->Paritys()[i].text, mbRTUModel->Paritys()[i].value);
+    //          if (mbRTUModel->Paritys()[i].value == mbRTUModel->Ports()[0]->parity())
+    //              ui->cmbParity->setCurrentIndex(i);
+    //      }
+
+    //      for (auto i = 0; i<mbRTUModel->DataBits().length(); i++){
+    //          ui->cmbDataBits->addItem(mbRTUModel->DataBits()[i].text, mbRTUModel->DataBits()[i].value);
+    //          if (mbRTUModel->DataBits()[i].value == mbRTUModel->Ports()[0]->dataBits())
+    //              ui->cmbDataBits->setCurrentIndex(i);
+    //     }
+
+
+    // }
 }
 
 
@@ -193,14 +192,14 @@ void MainWindow::SetCheckState(Qt::CheckState state){
     qDebug() << st;
 
 
-    if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
-        if (! reply->isFinished()){
-            connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
-        }
-        else{
-            delete reply;
-        }
-    }
+    // if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
+    //     if (! reply->isFinished()){
+    //         connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
+    //     }
+    //     else{
+    //         delete reply;
+    //     }
+    // }
 
 
 
@@ -212,9 +211,9 @@ void MainWindow::onStateChanged(QModbusDevice::State state) {
     switch (state){
     case QModbusDevice::ConnectedState:  break;
     case QModbusDevice::ClosingState:
-        if(serialRTU->Connected()) {
-            serialRTU->DisConnect();
-        }
+        // if(serialRTU->Connected()) {
+        //     serialRTU->DisConnect();
+        // }
         break ;
     default:
 
@@ -254,15 +253,15 @@ void MainWindow::ReadVersionClicked(){
             QModbusDataUnit readunit(QModbusDataUnit::Coils);
             readunit.setValues(requestValues);
 
-            if (auto * reply = serialRTU->modbusDevice->sendReadRequest(readunit,1))
-            {
-                if (! reply->isFinished()){
-                    connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
-                }
-                else{
-                    delete reply;
-                }
-            }
+            // if (auto * reply = serialRTU->modbusDevice->sendReadRequest(readunit,1))
+            // {
+            //     if (! reply->isFinished()){
+            //         connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
+            //     }
+            //     else{
+            //         delete reply;
+            //     }
+            // }
         }
     }
 }
@@ -309,14 +308,14 @@ void MainWindow::sendRequestClicked(){
             // send request
             QModbusDataUnit writeUnit(QModbusDataUnit::Coils);
             writeUnit.setValues(requestValues);
-            if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
-                if (! reply->isFinished()){
-                    connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
-                }
-                else{
-                    delete reply;
-                }
-            }
+            // if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
+            //     if (! reply->isFinished()){
+            //         connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
+            //     }
+            //     else{
+            //         delete reply;
+            //     }
+            // }
         }
     }
 }
@@ -381,14 +380,14 @@ void MainWindow::ReadRelaystate(){
 
     model->stringList().append(st);
 
-    if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
-        if (! reply->isFinished()){
-            connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
-        }
-        else{
-            delete reply;
-        }
-    }
+    // if (auto * reply = serialRTU->modbusDevice->sendWriteRequest(writeUnit,1)){
+    //     if (! reply->isFinished()){
+    //         connect(reply,&QModbusReply::finished,this,&MainWindow::replyFinished);
+    //     }
+    //     else{
+    //         delete reply;
+    //     }
+    // }
 }
 void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address, int size){
     bool wurscht = true;
@@ -430,7 +429,7 @@ void MainWindow::onTakeSettings(){
 
     QModbusRequest request(QModbusPdu::WriteSingleCoil,QByteArray::fromHex("01050001ff00DDFA"));
 
-    QModbusReply* repley = serialRTU->modbusDevice->sendRawRequest(request,1);
+   // QModbusReply* repley = serialRTU->modbusDevice->sendRawRequest(request,1);
    // QModbusRequest request(QModbusPdu::ReadSingleCoil,QByteArray::fromHex("0101000000083dcc"));
    // QByteArray img (reinterpret_cast<const char*>(protokoll.data()), protokoll.size());
 
