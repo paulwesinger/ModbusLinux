@@ -414,6 +414,8 @@ void MainWindow::onDataWritten(QModbusDataUnit::RegisterType table, int address,
 }
 void MainWindow::onTakeSettings(){
 
+    QString t = ui->cmboPorts->currentText();
+
     modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, ui->cmboPorts->currentText()); //mbRTUModel->CurrentPort()); // Z.B. COM2 (über Nullmodem-Kabel mit COM1 verbunden)
     modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, ui->cmbBaudRate->currentData().toInt());
     modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, ui->cmbDataBits->currentData().toInt());
@@ -439,6 +441,7 @@ void MainWindow::onTakeSettings(){
     else{
          qDebug() << "Port "<< mbRTUModel->CurrentPortName() << " NICHT offen  " << mbRTUModel->CurrentPort()->errorString() ;
         _PortOpen = false;
+
     }
 
 
@@ -448,6 +451,8 @@ void MainWindow::onTakeSettings(){
     // 3. Client verbinden
     if (!modbusClient->connectDevice()) {
         qDebug() << "Fehler beim Verbinden des Modbus-Clients:" << modbusClient->errorString();
+        if (_PortOpen)
+            mbRTUModel->CurrentPort()->close();
     }
 
     else{
